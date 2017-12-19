@@ -1,0 +1,19 @@
+abstract class Moving extends MapItem implements Movable{
+  
+  private int health;
+  
+  Moving(int x, int y, int health){
+    super(x, y);
+    this.health = health;
+  }
+  
+  public void moveLeft(){
+  }
+  public void moveRight(){
+  }
+  public void moveDown(){
+  }
+  public void moveUp(){
+  }
+  
+}
