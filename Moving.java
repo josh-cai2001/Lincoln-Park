@@ -16,4 +16,9 @@ abstract class Moving extends MapItem implements Movable{
   public void loseHealth(int damage){
     this.health = this.health - damage;
   }
+  public int returnHealth(){
+    return this.health;
+  }
+  
+  
 }

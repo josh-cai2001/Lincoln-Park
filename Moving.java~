@@ -7,13 +7,13 @@ abstract class Moving extends MapItem implements Movable{
     this.health = health;
   }
   
-  public void moveLeft(){
-  }
-  public void moveRight(){
-  }
-  public void moveDown(){
-  }
-  public void moveUp(){
-  }
+  abstract public void moveLeft();
+  abstract public void moveRight();
+  abstract public void moveDown();
+  abstract public void moveUp();
+  abstract public boolean checkCollision(MapItem m);
   
+  public void loseHealth(int damage){
+    this.health = this.health - damage;
+  }
 }
