@@ -3,7 +3,7 @@ public class Character<T> extends Moving{
   private T weapon;
   private int fatigue, hunger, thirst;
   
-  Character(int x, int y, int health, int fatigue, int hunger, int thirst){
+  Character(double x, double y, int health, int fatigue, int hunger, int thirst){
     super(x, y, health);
     weapon = (T)new Object();
     this.fatigue = fatigue;
@@ -15,16 +15,20 @@ public class Character<T> extends Moving{
     return this.weapon;
   }
   public void moveLeft(double elapsedTime){
-    
+    changeSpeed(-2);
+    changeX(returnX() + returnSpeed()*elapsedTime*100);
   }
   public void moveRight(double elapsedTime){
-    
+    changeSpeed(2);
+    changeX(returnX() + returnSpeed()*elapsedTime*100);
   }
   public void moveDown(double elapsedTime){
-    
+    changeSpeed(2);
+    changeY(returnY() + returnSpeed()*elapsedTime*100);
   }
   public void moveUp(double elapsedTime){
-    
+    changeSpeed(-2);
+    changeY(returnY() + returnSpeed()*elapsedTime*100);
   }
   public boolean checkCollision(MapItem m){
     if (boundingBox.intersects(m.boundingBox)){

@@ -14,16 +14,25 @@ public class Character<T> extends Moving{
   public T returnWeapon(){
     return this.weapon;
   }
-  public void moveLeft(){
+  public void moveLeft(double elapsedTime){
+    
   }
-  public void moveRight(){
+  public void moveRight(double elapsedTime){
+    
   }
-  public void moveDown(){
+  public void moveDown(double elapsedTime){
+    
   }
-  public void moveUp(){
+  public void moveUp(double elapsedTime){
+    
   }
   public boolean checkCollision(MapItem m){
-    return true;
+    if (boundingBox.intersects(m.boundingBox)){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
   public void rest(int recover){
     this.fatigue -= recover;

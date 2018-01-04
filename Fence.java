@@ -1,6 +1,6 @@
 public class Fence extends Stationary{
   
-  Fence(int x, int y){
+  Fence(double x, double y){
     super(x, y);
   }
   

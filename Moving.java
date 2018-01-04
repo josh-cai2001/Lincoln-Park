@@ -1,10 +1,12 @@
 abstract class Moving extends MapItem implements Movable{
   
   private int health;
+  private double speed;
   
-  Moving(int x, int y, int health){
+  Moving(double x, double y, int health){
     super(x, y);
     this.health = health;
+    this.speed = 1;
   }
   
   abstract public void moveLeft(double elapsedTime);
@@ -19,6 +21,11 @@ abstract class Moving extends MapItem implements Movable{
   public int returnHealth(){
     return this.health;
   }
-  
+  public void changeSpeed(double change){
+    this.speed = change;
+  }
+  public double returnSpeed(){
+    return this.speed;
+  }
   
 }
