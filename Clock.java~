@@ -1,8 +1,8 @@
 public class Clock {
-  private long elapsedTime;
-  private long lastTimeCheck;
+  long elapsedTime;
+  long lastTimeCheck;
 
-  Clock() { 
+  public Clock() { 
     lastTimeCheck=System.nanoTime();
     elapsedTime=0;
   }

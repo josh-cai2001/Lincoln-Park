@@ -1,0 +1,12 @@
+public class MapItem {
+  
+  private double x, y;
+  private Rectangle boundingBox;
+  
+  MapItem(double x, double y){
+    this.x = x;
+    this.y = y;
+    
+  }
+  
+}
