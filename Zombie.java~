@@ -1,0 +1,13 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+
+public class Zombie extends Moving{
+
+  Zombie(double x, double y, double health){
+    super(x, y, health);
+  }
+
+
+}

@@ -13,7 +13,7 @@ abstract class Moving extends MapItem implements Movable{
   abstract public void moveRight(double elapsedTime);
   abstract public void moveDown(double elapsedTime);
   abstract public void moveUp(double elapsedTime);
-  abstract public boolean checkCollision(MapItem m);
+//  abstract public boolean checkCollision(MapItem m);
   
   public void loseHealth(int damage){
     this.health = this.health - damage;

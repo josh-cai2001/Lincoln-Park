@@ -1,8 +1,8 @@
 public interface Movable{
   
-  public void moveLeft();
-  public void moveRight();
-  public void moveDown();
-  public void moveUp();
+  public void moveLeft(double elapsedTime);
+  public void moveRight(double elapsedTime);
+  public void moveDown(double elapsedTime);
+  public void moveUp(double elapsedTime);
   
 }
