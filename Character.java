@@ -35,9 +35,7 @@ public class Character extends Moving{
     changeY(returnY() - returnSpeed() );
   }
   public boolean checkLeftCollision(MapItem m){
-    if ((returnX() > m.returnX() + m.returnW()) && (boundingBox.intersects(m.boundingBox))){
-      System.out.println(returnX());
-      System.out.println(m.returnX());
+    if ((returnX() >= (m.returnX() + (m.returnW() * 0.9))) && (boundingBox.intersects(m.boundingBox))){
       return true;
     }
     else{
@@ -45,9 +43,7 @@ public class Character extends Moving{
     }
   }
   public boolean checkRightCollision(MapItem m){
-    if ((m.returnX() > returnX() + returnW()) && (boundingBox.intersects(m.boundingBox))){
-      System.out.println(returnX());
-      System.out.println(m.returnX());
+    if ((m.returnX() >= (returnX() + (m.returnW() * 0.9))) && (boundingBox.intersects(m.boundingBox))){
       return true;
     }
     else{
@@ -55,9 +51,7 @@ public class Character extends Moving{
     }
   }
   public boolean checkUpCollision(MapItem m){
-    if ((returnY() > m.returnY() + m.returnH()) && (boundingBox.intersects(m.boundingBox))){
-      System.out.println(returnY());
-      System.out.println(m.returnY());
+    if ((returnY() >= (m.returnY() + (m.returnH() * 0.9))) && (boundingBox.intersects(m.boundingBox))){
       return true;
     }
     else{
@@ -65,9 +59,7 @@ public class Character extends Moving{
     }
   }
   public boolean checkDownCollision(MapItem m){
-    if ((m.returnY() > returnY() + returnH()) && (boundingBox.intersects(m.boundingBox))){
-      System.out.println(returnY());
-      System.out.println(m.returnY());
+    if ((m.returnY() >= (returnY() + (m.returnH() * 0.9))) && (boundingBox.intersects(m.boundingBox))){
       return true;
     }
     else{

@@ -7,8 +7,8 @@ public class Character extends Moving{
 //  private T weapon;
   private double fatigue, hunger, thirst;
   
-  Character(double x, double y, double health, double fatigue, double hunger, double thirst){
-    super(x, y, health);
+  Character(double x, double y, double w, double h, double health, double fatigue, double hunger, double thirst){
+    super(x, y, w, h, health);
 //    weapon = (T)new Object();
     this.fatigue = fatigue;
     this.hunger = hunger;
@@ -34,14 +34,46 @@ public class Character extends Moving{
     changeSpeed((100-(this.fatigue))/100 * 2);
     changeY(returnY() - returnSpeed() );
   }
-//  public boolean checkCollision(MapItem m){
-//    if (boundingBox.intersects(m.boundingBox)){
-//      return true;
-//    }
-//    else{
-//      return false;
-//    }
-//  }
+  public boolean checkLeftCollision(MapItem m){
+    if ((returnX() > m.returnX() + m.returnW()) && (boundingBox.intersects(m.boundingBox))){
+      System.out.println(returnX());
+      System.out.println(m.returnX());
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  public boolean checkRightCollision(MapItem m){
+    if ((m.returnX() > returnX() + returnW()) && (boundingBox.intersects(m.boundingBox))){
+      System.out.println(returnX());
+      System.out.println(m.returnX());
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  public boolean checkUpCollision(MapItem m){
+    if ((returnY() > m.returnY() + m.returnH()) && (boundingBox.intersects(m.boundingBox))){
+      System.out.println(returnY());
+      System.out.println(m.returnY());
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  public boolean checkDownCollision(MapItem m){
+    if ((m.returnY() > returnY() + returnH()) && (boundingBox.intersects(m.boundingBox))){
+      System.out.println(returnY());
+      System.out.println(m.returnY());
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
   public void draw(Graphics g) { 
     g.setColor(Color.BLUE); 
     g.fillRect((int)(returnX()), (int)(returnY()), 25, 25);        
