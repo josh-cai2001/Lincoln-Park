@@ -45,13 +45,15 @@ class GameWindow extends JFrame {
     Character box;
     Clock clock;
     CharacterKeyListener kL;
+    Zombie zom;
     
     //constructor
     public GamePanel() { 
       setPreferredSize(new Dimension(1024,768));
-      box = new Character(50, 50, 50, 10, 50, 50);
+      box = new Character(50, 50, 50, 20, 50, 50);
       clock=new Clock();
       kL = new CharacterKeyListener();
+      zom = new Zombie(100, 100, 50);
       this.addKeyListener(kL);
       this.requestFocusInWindow();
     }
@@ -64,10 +66,12 @@ class GameWindow extends JFrame {
       
       //update the content
       clock.update();
+      zom.move(box.returnX(), box.returnY());
 //      box.update(clock.getElapsedTime());  //you can 'pause' the game by forcing elapsed time to zero
       
       //draw the screen
       box.draw(g);
+      zom.draw(g);
       
       //request a repaint
       repaint();
@@ -80,16 +84,16 @@ class GameWindow extends JFrame {
       public void keyPressed(KeyEvent e) {
         
         if (KeyEvent.getKeyText(e.getKeyCode()).equals("W")) {  
-          box.moveUp(box.returnFatigue());
+          box.moveUp();
         } 
         if (KeyEvent.getKeyText(e.getKeyCode()).equals("A")) {  
-          box.moveLeft(box.returnFatigue());
+          box.moveLeft();
         }  
         if (KeyEvent.getKeyText(e.getKeyCode()).equals("S")) {  
-          box.moveDown(box.returnFatigue());
+          box.moveDown();
         } 
         if (KeyEvent.getKeyText(e.getKeyCode()).equals("D")) {  
-          box.moveRight(box.returnFatigue());
+          box.moveRight();
         } 
       }  
       

@@ -1,24 +1,23 @@
 abstract class Moving extends MapItem implements Movable{
   
-  private int health;
-  private double speed;
+  private double health, speed;
   
-  Moving(double x, double y, int health){
+  Moving(double x, double y, double health){
     super(x, y);
     this.health = health;
-    this.speed = 1;
+    this.speed = 0.015;
   }
   
-  abstract public void moveLeft(double elapsedTime);
-  abstract public void moveRight(double elapsedTime);
-  abstract public void moveDown(double elapsedTime);
-  abstract public void moveUp(double elapsedTime);
+  abstract public void moveLeft();
+  abstract public void moveRight();
+  abstract public void moveDown();
+  abstract public void moveUp();
 //  abstract public boolean checkCollision(MapItem m);
   
   public void loseHealth(int damage){
     this.health = this.health - damage;
   }
-  public int returnHealth(){
+  public double returnHealth(){
     return this.health;
   }
   public void changeSpeed(double change){

@@ -5,9 +5,9 @@ import java.io.*;
 public class Character extends Moving{
   
 //  private T weapon;
-  private int fatigue, hunger, thirst;
+  private double fatigue, hunger, thirst;
   
-  Character(double x, double y, int health, int fatigue, int hunger, int thirst){
+  Character(double x, double y, double health, double fatigue, double hunger, double thirst){
     super(x, y, health);
 //    weapon = (T)new Object();
     this.fatigue = fatigue;
@@ -18,25 +18,21 @@ public class Character extends Moving{
 //  public T returnWeapon(){
 //    return this.weapon;
 //  }
-  public void moveLeft(double elapsedTime){
-//    changeSpeed(-20);
-//    changeX(returnX() + returnSpeed()*elapsedTime*100);
-    changeX(returnX() - ((100-elapsedTime)/100 * 2) );
+  public void moveLeft(){
+    changeSpeed((100-(this.fatigue))/100 * 2);
+    changeX(returnX() - returnSpeed() );
   }
-  public void moveRight(double elapsedTime){
-//    changeSpeed(20);
-  //  changeX(returnX() + returnSpeed()*elapsedTime*100);
-    changeX(returnX() + ((100-elapsedTime)/100 * 2) );
+  public void moveRight(){
+    changeSpeed((100-(this.fatigue))/100 * 2);
+    changeX(returnX() + returnSpeed());
   }
-  public void moveDown(double elapsedTime){
-    //changeSpeed(20);
-  //  changeY(returnY() + returnSpeed()*elapsedTime*100);
-    changeY(returnY() + ((100-elapsedTime)/100 * 2) );
+  public void moveDown(){
+    changeSpeed((100-(this.fatigue))/100 * 2);
+    changeY(returnY() + returnSpeed() );
   }
-  public void moveUp(double elapsedTime){
-    //changeSpeed(-20);
-  //  changeY(returnY() + returnSpeed()*elapsedTime*100);
-    changeY(returnY() - ((100-elapsedTime)/100 * 2) );
+  public void moveUp(){
+    changeSpeed((100-(this.fatigue))/100 * 2);
+    changeY(returnY() - returnSpeed() );
   }
 //  public boolean checkCollision(MapItem m){
 //    if (boundingBox.intersects(m.boundingBox)){
@@ -50,9 +46,6 @@ public class Character extends Moving{
     g.setColor(Color.BLUE); 
     g.fillRect((int)(returnX()), (int)(returnY()), 25, 25);        
   }
-  public void update(double elapsedTime){
-    
-  }
   public void rest(int recover){
     this.fatigue -= recover;
   }
@@ -63,7 +56,7 @@ public class Character extends Moving{
     this.thirst += water;
   }
   
-  public int returnFatigue(){
+  public double returnFatigue(){
     return this.fatigue;
   }
   

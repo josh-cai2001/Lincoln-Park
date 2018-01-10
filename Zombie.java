@@ -5,8 +5,8 @@ import java.io.*;
 
 public class Zombie extends Moving{
 
-  Zombie(double x, double y, double health){
-    super(x, y, health);
+  Zombie(double x, double y, double w, double h, double health){
+    super(x, y, w, h, health);
   }
   
   public void moveLeft(){
@@ -25,17 +25,25 @@ public class Zombie extends Moving{
     g.setColor(Color.GREEN); 
     g.fillRect((int)(returnX()), (int)(returnY()), 25, 25);        
   }
-  public void move(double x, double y){
-    if(x > returnX()){
+  public boolean checkCollision(MapItem m){
+    if (boundingBox.intersects(m.boundingBox)){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  public void move(double x, double y, MapItem m){
+    if((!checkCollision(m))&&(x > returnX())){
       moveRight();
     }
-    else{
+    else if(!checkCollision(m)){
       moveLeft();
     }
-    if(y > returnY()){
+    if((!checkCollision(m))&& (y > returnY())){
       moveDown();
     }
-    else{
+    else if(!checkCollision(m)){
       moveUp();
     }
   }

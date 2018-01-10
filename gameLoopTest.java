@@ -46,14 +46,15 @@ class GameWindow extends JFrame {
     Clock clock;
     CharacterKeyListener kL;
     Zombie zom;
+    int wait = 0;
     
     //constructor
     public GamePanel() { 
       setPreferredSize(new Dimension(1024,768));
-      box = new Character(50, 50, 50, 20, 50, 50);
+      box = new Character(50, 50, 25, 25, 50, 0, 50, 50);
       clock=new Clock();
       kL = new CharacterKeyListener();
-      zom = new Zombie(100, 100, 50);
+      zom = new Zombie(500, 500, 25, 25, 50);
       this.addKeyListener(kL);
       this.requestFocusInWindow();
     }
@@ -66,11 +67,28 @@ class GameWindow extends JFrame {
       
       //update the content
       clock.update();
-      zom.move(box.returnX(), box.returnY());
+      if (box != null){
+        zom.move(box.returnX(), box.returnY(), box);
+      }
 //      box.update(clock.getElapsedTime());  //you can 'pause' the game by forcing elapsed time to zero
       
+      if ((box != null) &&(zom.checkCollision(box)) && wait <= 0){
+        box.loseHealth(5);
+        System.out.println("collide" + box.returnHealth());
+        wait = 500;
+      }
+      else if (box != null){
+        wait--;
+      }
+      
+      if (box != null && (box.returnHealth() <= 0)){
+        box = null;
+      }
+      
       //draw the screen
-      box.draw(g);
+      if (box != null){
+        box.draw(g);
+      }
       zom.draw(g);
       
       //request a repaint
@@ -83,16 +101,16 @@ class GameWindow extends JFrame {
       
       public void keyPressed(KeyEvent e) {
         
-        if (KeyEvent.getKeyText(e.getKeyCode()).equals("W")) {  
+        if ((box != null) && (!box.checkUpCollision(zom)) && (KeyEvent.getKeyText(e.getKeyCode()).equals("W"))) {  
           box.moveUp();
         } 
-        if (KeyEvent.getKeyText(e.getKeyCode()).equals("A")) {  
+        if ((box != null) && (!box.checkLeftCollision(zom)) && (KeyEvent.getKeyText(e.getKeyCode()).equals("A"))) {  
           box.moveLeft();
         }  
-        if (KeyEvent.getKeyText(e.getKeyCode()).equals("S")) {  
+        if ((box != null) && (!box.checkDownCollision(zom)) && (KeyEvent.getKeyText(e.getKeyCode()).equals("S"))) {  
           box.moveDown();
         } 
-        if (KeyEvent.getKeyText(e.getKeyCode()).equals("D")) {  
+        if ((box != null) && (!box.checkRightCollision(zom)) && (KeyEvent.getKeyText(e.getKeyCode()).equals("D"))) {  
           box.moveRight();
         } 
       }  
