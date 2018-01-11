@@ -1,8 +1,4 @@
-/**
-* This template can be used as reference or a starting point
-* for your final summative project
-* @author Mangat
-**/
+
 
 //Graphics &GUI imports
 import javax.swing.JFrame;
@@ -36,10 +32,10 @@ class GameFrame extends JFrame {
   
     public static void main(String[] args) {
       
-    try {
+    try //Leading and resizing image
+    {
       tingImage = ImageIO.read(new File("./images/dab.jpg"));
     } catch (IOException e) {}
-    
     tingImage = resizeImage(tingImage, (int)(ting.getWidth()), (int)(ting.getHeight()));
       
     GameFrame game= new GameFrame(); 
@@ -99,15 +95,31 @@ class GameFrame extends JFrame {
     while(true){
       clock.update();
       box.update(clock.getElapsedTime());
-      ting.move(clock.getElapsedTime());
+      
        if (pressW)
        {
-         System.out.println(ting.getSpeed());
          ting.accelerate(clock.getElapsedTime());
+       }
+       else if (pressS)
+       {
+         ting.decelerate(clock.getElapsedTime());
        }
        else if (ting.getSpeed() != 0)
        {
          ting.slowDown(clock.getElapsedTime());
+       }
+       
+       if (pressD)
+       {
+         ting.accelerateRight(clock.getElapsedTime());
+       }
+       else if (pressA)
+       {
+         ting.accelerateLeft(clock.getElapsedTime());
+       }
+       else if (ting.getAngularSpeed() != 0)
+       {
+         ting.slowDownAngularSpeed(clock.getElapsedTime());
        }
        
        ting.move(clock.getElapsedTime());

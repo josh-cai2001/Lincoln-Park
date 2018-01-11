@@ -4,16 +4,12 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 
 class Ting {
-  private double x;
-  private double y;
-  private double rotation;
-  private double speed;
-  private double angularSpeed;
-  private double height, width;
+  private double x, y, rotation, speed, angularSpeed, height, width, energy;
   
   public Ting(double x, double y) {
     this.x = x;
     this.y = y;
+    this.energy = 1; //between 0 and 1
     this.speed = 0;
     this.angularSpeed = 0;
     this.rotation = 45; //In degrees
@@ -24,33 +20,44 @@ class Ting {
   public void move(double elapsedTime) {
     this.x += speed*Math.sin(Math.toRadians(this.rotation))*elapsedTime*100;
     this.y -= speed*Math.cos(Math.toRadians(this.rotation))*elapsedTime*100;
+    this.rotation += this.angularSpeed*elapsedTime*100;
   }
   
-  public void turnRight(double elapsedTime) {
-    this.rotation += this.speed*elapsedTime*100;
+  public void accelerateRight(double elapsedTime) {
+    this.angularSpeed += elapsedTime*this.energy;
   }
   
-  public void turnLeft(double elapsedTime) {
-    this.rotation -= this.speed*elapsedTime*100;
+  public void accelerateLeft(double elapsedTime) {
+    this.angularSpeed -= elapsedTime*this.energy;
   }
   
-  public void accelerate(double elapsedTime) {
-    this.speed += elapsedTime;
-  }
-  
-  public void decelerate(double elapsedTime) {
-    this.speed -= elapsedTime;
-  }
-  
-  public void slowDown(double elapsedTime) {
-    
-    if (speed >= 0)
+    public void slowDownAngularSpeed(double elapsedTime) {
+    if (angularSpeed >= 0)
     {
-      this.speed -= elapsedTime;
+      this.angularSpeed -= elapsedTime*this.energy/2;
     }
     else
     {
-      this.speed += elapsedTime;
+      this.angularSpeed += elapsedTime*this.energy/2;
+    }
+  }
+  
+  public void accelerate(double elapsedTime) {
+    this.speed += elapsedTime*this.energy;
+  }
+  
+  public void decelerate(double elapsedTime) {
+    this.speed -= elapsedTime*this.energy;
+  }
+  
+  public void slowDown(double elapsedTime) {
+    if (speed >= 0)
+    {
+      this.speed -= elapsedTime*this.energy/2;
+    }
+    else
+    {
+      this.speed += elapsedTime*this.energy/2;
     }
   }
   
@@ -103,5 +110,17 @@ class Ting {
   
   public double getSpeed() {
     return this.speed;
+  }
+  
+  public double getAngularSpeed() {
+    return this.angularSpeed;
+  }
+  
+  public double getEnergy() {
+    return this.energy;
+  }
+  
+  public void setEnergy(double input) {
+    this.energy = input;
   }
 }
