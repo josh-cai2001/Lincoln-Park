@@ -2,22 +2,24 @@ import java.awt.image.BufferedImage;
 import java.awt.Graphics;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
-abstract class Moving extends MapItem{
+
+class Ting {
+  private double x, y, rotation, speed, angularSpeed, height, width, energy;
   
-  private double health,rotation,speed,angularSpeed,energy;
-  
-  Moving(double x, double y, double w, double h, double health, double energy){
-    super(x, y, w, h);
-    this.health = health;
-    this.rotation = 0;
+  public Ting(double x, double y) {
+    this.x = x;
+    this.y = y;
+    this.energy = 1; //between 0 and 1
     this.speed = 0;
     this.angularSpeed = 0;
-    this.energy = energy;
+    this.rotation = 45; //In degrees
+    this.height = 100;
+    this.width = 200;
   }
   
   public void move(double elapsedTime) {
-    changeX(returnX() + speed*Math.sin(Math.toRadians(this.rotation))*elapsedTime*100);
-    changeY(returnY() - speed*Math.cos(Math.toRadians(this.rotation))*elapsedTime*100);
+    this.x += speed*Math.sin(Math.toRadians(this.rotation))*elapsedTime*100;
+    this.y -= speed*Math.cos(Math.toRadians(this.rotation))*elapsedTime*100;
     this.rotation += this.angularSpeed*elapsedTime*100;
   }
   
@@ -29,7 +31,7 @@ abstract class Moving extends MapItem{
     this.angularSpeed -= elapsedTime*this.energy;
   }
   
-  public void slowDownAngularSpeed(double elapsedTime) {
+    public void slowDownAngularSpeed(double elapsedTime) {
     if (angularSpeed >= 0)
     {
       this.angularSpeed -= elapsedTime*this.energy/2;
@@ -41,11 +43,11 @@ abstract class Moving extends MapItem{
   }
   
   public void accelerate(double elapsedTime) {
-    this.speed += elapsedTime*this.energy*0.5;
+    this.speed += elapsedTime*this.energy;
   }
   
   public void decelerate(double elapsedTime) {
-    this.speed -= elapsedTime*this.energy*0.5;
+    this.speed -= elapsedTime*this.energy;
   }
   
   public void slowDown(double elapsedTime) {
@@ -84,8 +86,8 @@ abstract class Moving extends MapItem{
       correctUy = unitX;
     }
     
-    int posAffineTransformOpX = (int)returnX()-(int)(locationX)-(int)(correctUx*diff);
-    int posAffineTransformOpY = (int)returnY()-(int)(locationY)-(int)(correctUy*diff);
+    int posAffineTransformOpX = (int)this.x-(int)(locationX)-(int)(correctUx*diff);
+    int posAffineTransformOpY = (int)this.y-(int)(locationY)-(int)(correctUy*diff);
     
 //translate the image center to same diff that dislocates the origin, to correct its point set
     AffineTransform objTrans = new AffineTransform();
@@ -98,6 +100,13 @@ abstract class Moving extends MapItem{
     g.drawImage(op.filter(image, null), posAffineTransformOpX, posAffineTransformOpY, null);
   }
   
+  public double getHeight() {
+    return this.height;
+  }
+  
+  public double getWidth() {
+    return this.width;
+  }
   
   public double getSpeed() {
     return this.speed;
@@ -114,18 +123,4 @@ abstract class Moving extends MapItem{
   public void setEnergy(double input) {
     this.energy = input;
   }
-  
-  public void loseHealth(int damage){
-    this.health = this.health - damage;
-  }
-  public double returnHealth(){
-    return this.health;
-  }
-  public void changeSpeed(double change){
-    this.speed = change;
-  }
-  public double returnSpeed(){
-    return this.speed;
-  }
-  
 }

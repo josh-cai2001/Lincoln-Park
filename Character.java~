@@ -4,20 +4,23 @@ import java.awt.event.*;
 import java.io.*;
 public class Character extends Moving{
   
-//  private T weapon;
-  private double fatigue, hunger, thirst;
+  private Weapon weapon;
+  private double fatigue, hunger, thirst, fuel;
   
-  Character(double x, double y, double w, double h, double health, double fatigue, double hunger, double thirst){
+  Character(double x, double y, double w, double h, double health, double fatigue, double hunger, double thirst, double fuel){
     super(x, y, w, h, health);
-//    weapon = (T)new Object();
+    weapon = new Knife(1, 1, 1, 1);
     this.fatigue = fatigue;
     this.hunger = hunger;
     this.thirst = thirst;
+    this.fuel = fuel;
   }
-  
-//  public T returnWeapon(){
-//    return this.weapon;
-//  }
+  public Weapon returnWeapon(){
+    return this.weapon;
+  }
+  public void changeWeapon(Weapon p){
+    this.weapon = p;
+  }
   public void moveLeft(){
     changeSpeed((100-(this.fatigue))/100 * 2);
     changeX(returnX() - returnSpeed() );

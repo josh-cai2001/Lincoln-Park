@@ -31,7 +31,7 @@ class Ting {
     this.angularSpeed -= elapsedTime*this.energy;
   }
   
-    public void slowDownAngularSpeed(double elapsedTime) {
+  public void slowDownAngularSpeed(double elapsedTime) {
     if (angularSpeed >= 0)
     {
       this.angularSpeed -= elapsedTime*this.energy/2;

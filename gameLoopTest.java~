@@ -20,16 +20,18 @@ class gameLoopTest {
 //This class represents the game window
 class GameWindow extends JFrame { 
   
+  Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+  double width = screenSize.getWidth();
+  double height = screenSize.getHeight() - 100;
+  
   //Window constructor
   public GameWindow() { 
     setTitle("Simple Game Loop Example");
-    //setSize(1280,1024);  // set the size of my window to 400 by 400 pixels
+    setSize((int)width,(int)height);  // set the size of my window to 400 by 400 pixels
     setResizable(true);  // set my window to allow the user to resize it
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // set the window up to end the program when closed
     GamePanel gp = new GamePanel();
     getContentPane().add(gp);
-//    CharacterKeyListener keyListener = new CharacterKeyListener();
-//    this.addKeyListener(keyListener);
      //make sure the frame has focus   
     pack(); //makes the frame fit the contents
     gp.requestFocusInWindow();
@@ -50,7 +52,7 @@ class GameWindow extends JFrame {
     
     //constructor
     public GamePanel() { 
-      setPreferredSize(new Dimension(1024,768));
+      setPreferredSize(new Dimension((int)width,(int)height));
       box = new Character(50, 50, 25, 25, 50, 0, 50, 50);
       clock=new Clock();
       kL = new CharacterKeyListener();
@@ -58,6 +60,7 @@ class GameWindow extends JFrame {
       this.addKeyListener(kL);
       this.requestFocusInWindow();
     }
+    
     
     
     public void paintComponent(Graphics g) { 
@@ -96,21 +99,22 @@ class GameWindow extends JFrame {
     }
     
     class CharacterKeyListener implements KeyListener{
+      
       public void keyTyped(KeyEvent e) {  
       }
       
       public void keyPressed(KeyEvent e) {
         
-        if ((box != null) && (!box.checkUpCollision(zom)) && (KeyEvent.getKeyText(e.getKeyCode()).equals("W"))) {  
+        if ((box != null) && (!box.checkUpCollision(zom)) && (box.returnY() >= 0) && (KeyEvent.getKeyText(e.getKeyCode()).equals("W"))) {  
           box.moveUp();
         } 
-        if ((box != null) && (!box.checkLeftCollision(zom)) && (KeyEvent.getKeyText(e.getKeyCode()).equals("A"))) {  
+        if ((box != null) && (!box.checkLeftCollision(zom)) && (box.returnX() >= 0) && (KeyEvent.getKeyText(e.getKeyCode()).equals("A"))) {  
           box.moveLeft();
         }  
-        if ((box != null) && (!box.checkDownCollision(zom)) && (KeyEvent.getKeyText(e.getKeyCode()).equals("S"))) {  
+        if ((box != null) && (!box.checkDownCollision(zom)) && (box.returnY() <= (height - box.returnH())) && (KeyEvent.getKeyText(e.getKeyCode()).equals("S"))) {  
           box.moveDown();
         } 
-        if ((box != null) && (!box.checkRightCollision(zom)) && (KeyEvent.getKeyText(e.getKeyCode()).equals("D"))) {  
+        if ((box != null) && (!box.checkRightCollision(zom)) && (box.returnX() <= (width - box.returnW())) && (KeyEvent.getKeyText(e.getKeyCode()).equals("D"))) {  
           box.moveRight();
         } 
       }  
