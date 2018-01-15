@@ -1,6 +1,6 @@
 public class Rubble extends Stationary{
   
-  Rubble(int x, int y){
+  Rubble(double x, double y){
     super(x, y);
   }
   

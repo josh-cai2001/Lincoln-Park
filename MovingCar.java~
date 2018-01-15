@@ -2,36 +2,32 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-public class Character extends Moving{
+public class Car extends Moving{
   
-//  private T weapon;
-  private double fatigue, hunger, thirst;
+  private double fatigue, hunger, thirst, fuel;
   
-  Character(double x, double y, double w, double h, double health, double fatigue, double hunger, double thirst){
+  Car(double x, double y, double w, double h, double health, double fatigue, double hunger, double thirst, double fuel){
     super(x, y, w, h, health);
-//    weapon = (T)new Object();
     this.fatigue = fatigue;
     this.hunger = hunger;
     this.thirst = thirst;
+    this.fuel = fuel;
   }
   
-//  public T returnWeapon(){
-//    return this.weapon;
-//  }
   public void moveLeft(){
-    changeSpeed((100-(this.fatigue))/100 * 2);
+    changeSpeed((100-(this.fatigue))/100 * 4);
     changeX(returnX() - returnSpeed() );
   }
   public void moveRight(){
-    changeSpeed((100-(this.fatigue))/100 * 2);
+    changeSpeed((100-(this.fatigue))/100 * 4);
     changeX(returnX() + returnSpeed());
   }
   public void moveDown(){
-    changeSpeed((100-(this.fatigue))/100 * 2);
+    changeSpeed((100-(this.fatigue))/100 * 4);
     changeY(returnY() + returnSpeed() );
   }
   public void moveUp(){
-    changeSpeed((100-(this.fatigue))/100 * 2);
+    changeSpeed((100-(this.fatigue))/100 * 4);
     changeY(returnY() - returnSpeed() );
   }
   public boolean checkLeftCollision(MapItem m){
@@ -67,21 +63,8 @@ public class Character extends Moving{
     }
   }
   public void draw(Graphics g) { 
-    g.setColor(Color.BLUE); 
+    g.setColor(Color.BLACK); 
     g.fillRect((int)(returnX()), (int)(returnY()), 25, 25);        
-  }
-  public void rest(int recover){
-    this.fatigue -= recover;
-  }
-  public void eat(int food){
-    this.hunger += food;
-  }
-  public void drink(int water){
-    this.thirst += water;
-  }
-  
-  public double returnFatigue(){
-    return this.fatigue;
   }
   
 }

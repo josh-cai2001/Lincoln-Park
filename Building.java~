@@ -1,6 +1,6 @@
 public class Building extends Stationary{
   
-  Building(int x, int y){
+  Building(double x, double y){
     super(x, y);
   }
   

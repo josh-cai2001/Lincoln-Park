@@ -1,6 +1,6 @@
 abstract class Stationary extends MapItem{
   
-  Stationary(int x, int y){
+  Stationary(double x, double y){
     super(x, y);
   }
   
