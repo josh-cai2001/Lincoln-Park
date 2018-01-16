@@ -6,11 +6,11 @@ abstract class Moving extends MapItem{
   
   private double health,rotation,speed,angularSpeed,energy;
   
-  Moving(double x, double y, double w, double h, double health, double energy){
+  Moving(double x, double y, double w, double h, double health, double energy, double speed){
     super(x, y, w, h);
     this.health = health;
-    this.rotation = 0;
-    this.speed = 0;
+    this.rotation = 117;
+    this.speed = speed;
     this.angularSpeed = 0;
     this.energy = energy;
   }
@@ -22,40 +22,40 @@ abstract class Moving extends MapItem{
   }
   
   public void accelerateRight(double elapsedTime) {
-    this.angularSpeed += elapsedTime*this.energy;
+    this.angularSpeed += elapsedTime*this.energy*2;
   }
   
   public void accelerateLeft(double elapsedTime) {
-    this.angularSpeed -= elapsedTime*this.energy;
+    this.angularSpeed -= elapsedTime*this.energy*2;
   }
   
   public void slowDownAngularSpeed(double elapsedTime) {
     if (angularSpeed >= 0)
     {
-      this.angularSpeed -= elapsedTime*this.energy/2;
+      this.angularSpeed -= elapsedTime*this.energy*1.75;
     }
     else
     {
-      this.angularSpeed += elapsedTime*this.energy/2;
+      this.angularSpeed += elapsedTime*this.energy*1.75;
     }
   }
   
   public void accelerate(double elapsedTime) {
-    this.speed += elapsedTime*this.energy*0.5;
+    this.speed += elapsedTime*this.energy;
   }
   
   public void decelerate(double elapsedTime) {
-    this.speed -= elapsedTime*this.energy*0.5;
+    this.speed -= elapsedTime*this.energy;
   }
   
   public void slowDown(double elapsedTime) {
     if (speed >= 0)
     {
-      this.speed -= elapsedTime*this.energy/2;
+      this.speed -= elapsedTime*this.energy*0.75;
     }
     else
     {
-      this.speed += elapsedTime*this.energy/2;
+      this.speed += elapsedTime*this.energy*0.75;
     }
   }
   
@@ -126,6 +126,12 @@ abstract class Moving extends MapItem{
   }
   public double returnSpeed(){
     return this.speed;
+  }
+  public double getRotation(){
+    return this.rotation;
+  }
+  public void changeRotation(double change){
+    this.rotation = change;
   }
   
 }

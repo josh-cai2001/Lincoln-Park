@@ -2,11 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-public class Car extends Moving{
+public class MovingCar extends Moving{
   
   private double fatigue, hunger, thirst, fuel;
   
-  Car(double x, double y, double w, double h, double health, double fatigue, double hunger, double thirst, double fuel){
+  MovingCar(double x, double y, double w, double h, double health, double fatigue, double hunger, double thirst, double fuel){
     super(x, y, w, h, health);
     this.fatigue = fatigue;
     this.hunger = hunger;

@@ -24,6 +24,7 @@ import java.awt.event.MouseEvent;
 class GameFrame extends JFrame { 
   
   public static BufferedImage tingImage;
+  public static BufferedImage zomImage;
   
   public static boolean pressW = false;
   public static boolean pressA = false;
@@ -34,10 +35,12 @@ class GameFrame extends JFrame {
       
     try //Leading and resizing image
     {
-      tingImage = ImageIO.read(new File("./Sprites/human(main).PNG"));
+      tingImage = ImageIO.read(new File("./Sprites/main_human.PNG"));
+      zomImage = ImageIO.read(new File("./Sprites/zombie.PNG"));
     } catch (IOException e) {}
     tingImage = resizeImage(tingImage, (int)(player.returnW()), (int)(player.returnH()));
       
+    zomImage = resizeImage(zomImage, (int)(zom.returnW()), (int)(zom.returnH()));
     GameFrame game= new GameFrame(); 
   }
     
@@ -52,7 +55,8 @@ class GameFrame extends JFrame {
     return dimg;
     }  
 
-   static Character player = new Character(300,300,50,50,100,5,70,70,100);
+   static Character player = new Character(300,300,50,50,100,5,70,70,100, 0);
+   static Zombie zom = new Zombie(100,100,50,50,100, 0.25);
    Clock clock = new Clock();
    
    static GameAreaPanel gamePanel;
@@ -93,6 +97,7 @@ class GameFrame extends JFrame {
     
     while(true){
       clock.update();
+      zom.update(clock.getElapsedTime(), player);
       
        if (pressW)
        {
@@ -134,7 +139,10 @@ class GameFrame extends JFrame {
        super.paintComponent(g); //required
        setDoubleBuffered(true); 
        
+       
+       
        player.draw(g, tingImage); 
+       zom.draw(g, zomImage);
     }
   }
   
