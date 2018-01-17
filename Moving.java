@@ -9,7 +9,7 @@ abstract class Moving extends MapItem{
   Moving(double x, double y, double w, double h, double health, double energy, double speed){
     super(x, y, w, h);
     this.health = health;
-    this.rotation = 117;
+    this.rotation = 0;
     this.speed = speed;
     this.angularSpeed = 0;
     this.energy = energy;
@@ -22,21 +22,21 @@ abstract class Moving extends MapItem{
   }
   
   public void accelerateRight(double elapsedTime) {
-    this.angularSpeed += elapsedTime*this.energy*2;
+    this.angularSpeed += elapsedTime*this.energy*2.5;
   }
   
   public void accelerateLeft(double elapsedTime) {
-    this.angularSpeed -= elapsedTime*this.energy*2;
+    this.angularSpeed -= elapsedTime*this.energy*2.5;
   }
   
   public void slowDownAngularSpeed(double elapsedTime) {
     if (angularSpeed >= 0)
     {
-      this.angularSpeed -= elapsedTime*this.energy*1.75;
+      this.angularSpeed -= elapsedTime*this.energy*2;
     }
     else
     {
-      this.angularSpeed += elapsedTime*this.energy*1.75;
+      this.angularSpeed += elapsedTime*this.energy*2;
     }
   }
   

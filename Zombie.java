@@ -34,6 +34,9 @@ public class Zombie extends Moving{
   }
   
   public void move(double elapsedTime){
+    if(getSpeed() <= 0.25){
+      accelerate(elapsedTime);
+    }
     changeX(returnX() + getSpeed()*Math.sin(Math.toRadians(getRotation()))*elapsedTime*100);
     changeY(returnY() - getSpeed()*Math.cos(Math.toRadians(getRotation()))*elapsedTime*100);
   }
@@ -119,4 +122,12 @@ public class Zombie extends Moving{
 //      moveUp();
 //    }
 //  }
+  public boolean checkCollision(MapItem m){
+    if (boundingBox.intersects(m.boundingBox)){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
 }

@@ -4,4 +4,7 @@ public class Knife extends Weapon{
     super(x, y, w, h, 1, 400, 10);
   }
   
+  public void shoot(){
+    
+  }
 }

@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 import java.io.File;
 import java.io.IOException;
-  
+
 //Keyboard imports
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -30,36 +30,61 @@ class GameFrame extends JFrame {
   public static boolean pressA = false;
   public static boolean pressS = false;
   public static boolean pressD = false;
+  public static boolean pressSpace = false;
   
-    public static void main(String[] args) {
-      
+  public static void main(String[] args) {
+    addZombies();
     try //Leading and resizing image
     {
       tingImage = ImageIO.read(new File("./Sprites/main_human.PNG"));
       zomImage = ImageIO.read(new File("./Sprites/zombie.PNG"));
+      
     } catch (IOException e) {}
     tingImage = resizeImage(tingImage, (int)(player.returnW()), (int)(player.returnH()));
-      
-    zomImage = resizeImage(zomImage, (int)(zom.returnW()), (int)(zom.returnH()));
+    
+    zomImage = resizeImage(zomImage, (int)(zoms[0].returnW()), (int)(zoms[0].returnH()));
+    
     GameFrame game= new GameFrame(); 
   }
-    
-    public static BufferedImage resizeImage(BufferedImage img, int newW, int newH) {  
+  
+  public static BufferedImage resizeImage(BufferedImage img, int newW, int newH) {  
     Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
     BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
-
+    
     Graphics2D g2d = dimg.createGraphics();
     g2d.drawImage(tmp, 0, 0, null);
     g2d.dispose();
-
+    
     return dimg;
-    }  
-
-   static Character player = new Character(300,300,50,50,100,5,70,70,100, 0);
-   static Zombie zom = new Zombie(100,100,50,50,100, 0.25);
-   Clock clock = new Clock();
-   
-   static GameAreaPanel gamePanel;
+  }  
+  
+  static MapItem player = new Character(300,300,50,50,100,5,70,70,100, 0);
+  
+  static MapItem[] zoms = new Zombie[5];
+  
+  public static void addZombies(){
+    for (int i = 0; i < 5; i++){
+      if (i == 0){
+        zoms[i] = new Zombie(100,100,50,50,100,0.25);
+      }
+      else if (i == 1){
+        zoms[i] = new Zombie(200,100,50,50,100,0.25);
+      }
+      else if (i == 2){
+        zoms[i] = new Zombie(100,200,50,50,100,0.25);
+      }
+      else if (i == 3){
+        zoms[i] = new Zombie(400,400,50,50,100,0.25);
+      }
+      else if (i == 4){
+        zoms[i] = new Zombie(500,500,50,50,100,0.25);
+      }
+    }
+  }
+  
+  Clock clock = new Clock();
+  
+  static GameAreaPanel gamePanel;
   
   
   //Constructor - this runs first
@@ -69,66 +94,86 @@ class GameFrame extends JFrame {
     // Set the frame to full screen 
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
-   // this.setUndecorated(true);  //Set to true to remove title bar
-   //frame.setResizable(false);
-
+    // this.setUndecorated(true);  //Set to true to remove title bar
+    //frame.setResizable(false);
+    
     //Set up the game panel (where we put our graphics)
     gamePanel = new GameAreaPanel();
     this.add(new GameAreaPanel());
     
     MyKeyListener keyListener = new MyKeyListener();
     this.addKeyListener(keyListener);
-
+    
     MyMouseListener mouseListener = new MyMouseListener();
     this.addMouseListener(mouseListener);
-
+    
     this.requestFocusInWindow(); //make sure the frame has focus   
     
     this.setVisible(true);
-  
+    
     //Start the game loop in a separate thread
     Thread t = new Thread(new Runnable() { public void run() { animate(); }}); //start the gameLoop 
     t.start();
-   
+    
   } //End of Constructor
-
+  
   //the main gameloop - this is where the game state is updated
   public void animate() { 
     
     while(true){
       clock.update();
-      zom.update(clock.getElapsedTime(), player);
+      for(int i = 0; i <5; i++){
+        zoms[i].update(clock.getElapsedTime(), player);
+        if (player.checkCollision(zoms[i])){
+          player.changeSpeed(-1*player.getSpeed());
+          zoms[i].changeSpeed(-1.5*zoms[i].getSpeed());
+        }
+        
+      }
       
-       if (pressW)
-       {
-         player.accelerate(clock.getElapsedTime());
-       }
-       else if (pressS)
-       {
-         player.decelerate(clock.getElapsedTime());
-       }
-       else if (player.getSpeed() != 0)
-       {
-         player.slowDown(clock.getElapsedTime());
-       }
-       
-       if (pressD)
-       {
-         player.accelerateRight(clock.getElapsedTime());
-       }
-       else if (pressA)
-       {
-         player.accelerateLeft(clock.getElapsedTime());
-       }
-       else if (player.getAngularSpeed() != 0)
-       {
-         player.slowDownAngularSpeed(clock.getElapsedTime());
-       }
-       
-       player.move(clock.getElapsedTime());
+      if (pressW && (player.getSpeed() < 1.5))
+      {
+        player.accelerate(clock.getElapsedTime());
+      }
+      else if (pressS && (player.getSpeed() > -1.5))
+      {
+        player.decelerate(clock.getElapsedTime());
+      }
+      else if (player.getSpeed() != 0)
+      {
+        player.slowDown(clock.getElapsedTime());
+      }
+      
+      if (pressD && (player.getAngularSpeed() < 1.5))
+      {
+        player.accelerateRight(clock.getElapsedTime());
+      }
+      else if (pressA && (player.getAngularSpeed() > -1.5))
+      {
+        player.accelerateLeft(clock.getElapsedTime());
+      }
+      else if (player.getAngularSpeed() != 0)
+      {
+        player.slowDownAngularSpeed(clock.getElapsedTime());
+      }
+      if(pressSpace){
+        if ((player.returnWeapon()).getAmmo() > 0  && (player.returnWeapon()).getCoolDown() <= 0){
+          System.out.println((player.returnWeapon()).getCoolDown());
+          System.out.println((player.returnWeapon()).getAmmo());
+          player.attack();
+          
+        }
+System.out.println((player.returnWeapon()).getCoolDown());
+          System.out.println((player.returnWeapon()).getAmmo());
+        
+      }
+      (player.returnWeapon()).changeCoolDown(1);
+      
+      player.move(clock.getElapsedTime());
       
       this.repaint();
     }    
+    
   }
   
   /** --------- INNER CLASSES ------------- **/
@@ -136,77 +181,82 @@ class GameFrame extends JFrame {
   // Inner class for the the game area - This is where all the drawing of the screen occurs
   private class GameAreaPanel extends JPanel {
     public void paintComponent(Graphics g) {   
-       super.paintComponent(g); //required
-       setDoubleBuffered(true); 
-       
-       
-       
-       player.draw(g, tingImage); 
-       zom.draw(g, zomImage);
+      super.paintComponent(g); //required
+      setDoubleBuffered(true); 
+      
+      
+      
+      player.draw(g, tingImage); 
+      for(int i = 0; i <5; i++){
+        zoms[i].draw(g, zomImage);
+      }
     }
   }
   
   // -----------  Inner class for the keyboard listener - this detects key presses and runs the corresponding code
-    private class MyKeyListener implements KeyListener {
+  private class MyKeyListener implements KeyListener {
+    
+    public void keyTyped(KeyEvent e) {  
+    }
+    
+    public void keyPressed(KeyEvent e) {
+      //System.out.println("keyPressed="+KeyEvent.getKeyText(e.getKeyCode()));
       
-      public void keyTyped(KeyEvent e) {  
+      if (KeyEvent.getKeyText(e.getKeyCode()).equals("W")) {  //If 'W' is pressed
+        pressW = true;
+      } 
+      if (KeyEvent.getKeyText(e.getKeyCode()).equals("A")) { 
+        pressA = true;
       }
-
-      public void keyPressed(KeyEvent e) {
-        //System.out.println("keyPressed="+KeyEvent.getKeyText(e.getKeyCode()));
-       
-        if (KeyEvent.getKeyText(e.getKeyCode()).equals("W")) {  //If 'W' is pressed
-          pressW = true;
-        } 
-        if (KeyEvent.getKeyText(e.getKeyCode()).equals("A")) { 
-          pressA = true;
-        }
-        if (KeyEvent.getKeyText(e.getKeyCode()).equals("S")) { 
-          pressS = true;
-        }
-        if (KeyEvent.getKeyText(e.getKeyCode()).equals("D")) { 
-          pressD = true;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {  //If ESC is pressed
-          System.out.println("YIKES ESCAPE KEY!"); //close frame & quit
-        } 
-      }   
-      
-      public void keyReleased(KeyEvent e) {
-        if (KeyEvent.getKeyText(e.getKeyCode()).equals("W")) {  //If 'W' is released
-          pressW = false;
-        }
-        if (KeyEvent.getKeyText(e.getKeyCode()).equals("A")) { 
-          pressA = false;
-        }
-        if (KeyEvent.getKeyText(e.getKeyCode()).equals("S")) { 
-          pressS = false;
-        }
-        if (KeyEvent.getKeyText(e.getKeyCode()).equals("D")) { 
-          pressD = false;
-        }
+      if (KeyEvent.getKeyText(e.getKeyCode()).equals("S")) { 
+        pressS = true;
       }
-    } //end of keyboard listener
+      if (KeyEvent.getKeyText(e.getKeyCode()).equals("D")) { 
+        pressD = true;
+      }
+      if (e.getKeyCode() == KeyEvent.VK_SPACE) {  //If ESC is pressed
+        pressSpace = true;
+      } 
+    }   
+    
+    public void keyReleased(KeyEvent e) {
+      if (KeyEvent.getKeyText(e.getKeyCode()).equals("W")) {  //If 'W' is released
+        pressW = false;
+      }
+      if (KeyEvent.getKeyText(e.getKeyCode()).equals("A")) { 
+        pressA = false;
+      }
+      if (KeyEvent.getKeyText(e.getKeyCode()).equals("S")) { 
+        pressS = false;
+      }
+      if (KeyEvent.getKeyText(e.getKeyCode()).equals("D")) { 
+        pressD = false;
+      }
+      if (e.getKeyCode() == KeyEvent.VK_SPACE) {  //If ESC is pressed
+        pressSpace = false;
+      } 
+    }
+  } //end of keyboard listener
   
   // -----------  Inner class for the keyboard listener - This detects mouse movement & clicks and runs the corresponding methods 
-    private class MyMouseListener implements MouseListener {
-   
-      public void mouseClicked(MouseEvent e) {
-        System.out.println("Mouse Clicked");
-        System.out.println("X:"+e.getX() + " y:"+e.getY());
-      }
-
-      public void mousePressed(MouseEvent e) {
-      }
-
-      public void mouseReleased(MouseEvent e) {
-      }
-
-      public void mouseEntered(MouseEvent e) {
-      }
-
-      public void mouseExited(MouseEvent e) {
-      }
-    } //end of mouselistener
+  private class MyMouseListener implements MouseListener {
     
+    public void mouseClicked(MouseEvent e) {
+      System.out.println("Mouse Clicked");
+      System.out.println("X:"+e.getX() + " y:"+e.getY());
+    }
+    
+    public void mousePressed(MouseEvent e) {
+    }
+    
+    public void mouseReleased(MouseEvent e) {
+    }
+    
+    public void mouseEntered(MouseEvent e) {
+    }
+    
+    public void mouseExited(MouseEvent e) {
+    }
+  } //end of mouselistener
+  
 }

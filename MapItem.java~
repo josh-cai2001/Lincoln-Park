@@ -2,14 +2,14 @@ import java.awt.Rectangle;
 public class MapItem {
   
   private double x, y, w, h;
-  Rectangle boundingBox;
+//  Rectangle boundingBox;
   
   MapItem(double x, double y, double w, double h){
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
-    boundingBox = new Rectangle((int)x, (int)y, (int)w, (int)h);    
+//    boundingBox = new Rectangle((int)x, (int)y, (int)w, (int)h);    
   }
   
   public double returnW(){
@@ -23,14 +23,14 @@ public class MapItem {
   }
   public void changeX(double change){
     this.x = change;
-    boundingBox.x = (int)change;
+//    boundingBox.x = (int)change;
   }
   public double returnY(){
     return this.y;
   }
   public void changeY(double change){
     this.y = change;
-    boundingBox.y = (int)change;
+//    boundingBox.y = (int)change;
   }
   
 }

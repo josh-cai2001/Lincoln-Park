@@ -22,6 +22,13 @@ public class Character extends Moving{
   public void changeWeapon(Weapon p){
     this.weapon = p;
   }
+  public void attack(){
+    if (weapon.getAmmo() > 0  && weapon.getCoolDown() <= 0){
+      weapon.shoot();
+      weapon.resetCoolDown();
+    }
+  } 
+                      
 //  public void moveLeft(){
 //    changeSpeed((100-(this.fatigue))/100 * 2);
 //    changeX(returnX() - returnSpeed() );
@@ -38,14 +45,14 @@ public class Character extends Moving{
 //    changeSpeed((100-(this.fatigue))/100 * 2);
 //    changeY(returnY() - returnSpeed() );
 //  }
-//  public boolean checkLeftCollision(MapItem m){
-//    if ((returnX() >= (m.returnX() + (m.returnW() * 0.9))) && (boundingBox.intersects(m.boundingBox))){
-//      return true;
-//    }
-//    else{
-//      return false;
-//    }
-//  }
+  public boolean checkCollision(MapItem m){
+    if (boundingBox.intersects(m.boundingBox)){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
 //  public boolean checkRightCollision(MapItem m){
 //    if ((m.returnX() >= (returnX() + (m.returnW() * 0.9))) && (boundingBox.intersects(m.boundingBox))){
 //      return true;
@@ -89,5 +96,8 @@ public class Character extends Moving{
   public double returnFatigue(){
     return this.fatigue;
   }
+  
+  
+  
   
 }
