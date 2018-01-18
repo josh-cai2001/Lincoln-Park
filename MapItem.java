@@ -23,6 +23,9 @@ public class MapItem {
   public double returnW(){
     return this.w;
   }
+  public double returnDamage(){
+    return 2;
+  }
   public double returnH(){
     return this.h;
   }
@@ -41,7 +44,9 @@ public class MapItem {
     boundingBox.y = (int)change;
   }
   
-  
+  public void loseHealth(double damage){
+    
+  }
   
   
   
@@ -79,6 +84,9 @@ public class MapItem {
   
   public void update(double elapsedTime, MapItem m){
     faceCharacter(m);
+    move(elapsedTime);
+  }
+  public void update(double elapsedTime){
     move(elapsedTime);
   }
   

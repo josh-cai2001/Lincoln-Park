@@ -22,11 +22,14 @@ abstract public class Weapon extends MapItem{
   public double getCoolDown(){
     return this.coolDown;
   }
-  public void changeCoolDown(double change){
-    this.coolDown -= change;
+  public void reduceCoolDown(){
+    this.coolDown -= 1;
   }
   public void resetCoolDown(){
     this.coolDown = this.coolDownStore;
+  }
+  public double returnDamage(){
+    return this.damage;
   }
   
 }

@@ -6,12 +6,12 @@ abstract class Moving extends MapItem{
   
   private double health,rotation,speed,angularSpeed,energy;
   
-  Moving(double x, double y, double w, double h, double health, double energy, double speed){
+  Moving(double x, double y, double w, double h, double health, double energy, double speed, double rotation, double angularSpeed){
     super(x, y, w, h);
     this.health = health;
-    this.rotation = 0;
+    this.rotation= rotation;
     this.speed = speed;
-    this.angularSpeed = 0;
+    this.angularSpeed = angularSpeed;
     this.energy = energy;
   }
   
@@ -115,7 +115,7 @@ abstract class Moving extends MapItem{
     this.energy = input;
   }
   
-  public void loseHealth(int damage){
+  public void loseHealth(double damage){
     this.health = this.health - damage;
   }
   public double returnHealth(){

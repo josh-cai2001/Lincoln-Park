@@ -10,8 +10,8 @@ import java.util.*;
 
 public class Zombie extends Moving{
 
-  Zombie(double x, double y, double w, double h, double health, double speed){
-    super(x, y, w, h, health, 0.75, speed);
+  Zombie(double x, double y, double w, double h, double health, double speed, double rotation, double angularSpeed){
+    super(x, y, w, h, health, 0.75, speed, rotation, angularSpeed);
   }
   
   public void faceCharacter(MapItem m){
@@ -34,6 +34,9 @@ public class Zombie extends Moving{
   }
   
   public void move(double elapsedTime){
+    if(getSpeed() <= 0.25){
+      accelerate(elapsedTime);
+    }
     changeX(returnX() + getSpeed()*Math.sin(Math.toRadians(getRotation()))*elapsedTime*100);
     changeY(returnY() - getSpeed()*Math.cos(Math.toRadians(getRotation()))*elapsedTime*100);
   }
@@ -119,4 +122,12 @@ public class Zombie extends Moving{
 //      moveUp();
 //    }
 //  }
+  public boolean checkCollision(MapItem m){
+    if (boundingBox.intersects(m.boundingBox)){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
 }

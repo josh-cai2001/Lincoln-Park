@@ -8,9 +8,9 @@ public class Character extends Moving{
   private Weapon weapon;
   private double fatigue, hunger, thirst, fuel;
   
-  Character(double x, double y, double w, double h, double health, double fatigue, double hunger, double thirst, double fuel, double speed){
-    super(x, y, w, h, health, 1, speed);
-    weapon = new Knife(1, 1, 1, 1);
+  Character(double x, double y, double w, double h, double health, double fatigue, double hunger, double thirst, double fuel, double speed, double rotation, double angularSpeed){
+    super(x, y, w, h, health, 1, speed, rotation, angularSpeed);
+    weapon = new Pistol(1, 1, 1, 1);
     this.fatigue = fatigue;
     this.hunger = hunger;
     this.thirst = thirst;
@@ -96,8 +96,7 @@ public class Character extends Moving{
   public double returnFatigue(){
     return this.fatigue;
   }
-  
-  
+
   
   
 }

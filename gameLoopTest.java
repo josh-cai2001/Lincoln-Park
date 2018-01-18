@@ -25,12 +25,15 @@ class GameFrame extends JFrame {
   
   public static BufferedImage tingImage;
   public static BufferedImage zomImage;
+  public static BufferedImage bulletImage;
   
   public static boolean pressW = false;
   public static boolean pressA = false;
   public static boolean pressS = false;
   public static boolean pressD = false;
   public static boolean pressSpace = false;
+  public static boolean bulletShootable = false;
+  public static int bulletCoolDown = 0;
   
   public static void main(String[] args) {
     addZombies();
@@ -38,11 +41,14 @@ class GameFrame extends JFrame {
     {
       tingImage = ImageIO.read(new File("./Sprites/main_human.PNG"));
       zomImage = ImageIO.read(new File("./Sprites/zombie.PNG"));
+      bulletImage = ImageIO.read(new File("./Sprites/bullet.PNG"));
       
     } catch (IOException e) {}
     tingImage = resizeImage(tingImage, (int)(player.returnW()), (int)(player.returnH()));
     
     zomImage = resizeImage(zomImage, (int)(zoms[0].returnW()), (int)(zoms[0].returnH()));
+    
+    bulletImage = resizeImage(bulletImage, (int)(bullet.returnW()), (int)(bullet.returnH()));
     
     GameFrame game= new GameFrame(); 
   }
@@ -58,26 +64,26 @@ class GameFrame extends JFrame {
     return dimg;
   }  
   
-  static MapItem player = new Character(300,300,50,50,100,5,70,70,100, 0);
-  
+  static MapItem player = new Character(300,300,50,50,100,5,70,70,100, 0, 90, 0);
+  static MapItem bullet = new Bullet (0,0,10,10,100,10,player.getRotation(),player.getAngularSpeed());
   static MapItem[] zoms = new Zombie[5];
   
   public static void addZombies(){
     for (int i = 0; i < 5; i++){
       if (i == 0){
-        zoms[i] = new Zombie(100,100,50,50,100,0.25);
+        zoms[i] = new Zombie(100,100,50,50,100,0.25, 0, 0);
       }
       else if (i == 1){
-        zoms[i] = new Zombie(200,100,50,50,100,0.25);
+        zoms[i] = new Zombie(200,100,50,50,100,0.25, 0, 0);
       }
       else if (i == 2){
-        zoms[i] = new Zombie(100,200,50,50,100,0.25);
+        zoms[i] = new Zombie(100,200,50,50,100,0.25, 0, 0);
       }
       else if (i == 3){
-        zoms[i] = new Zombie(400,400,50,50,100,0.25);
+        zoms[i] = new Zombie(400,400,50,50,100,0.25,0,0);
       }
       else if (i == 4){
-        zoms[i] = new Zombie(500,500,50,50,100,0.25);
+        zoms[i] = new Zombie(500,500,50,50,100,0.25,0,0);
       }
     }
   }
@@ -122,15 +128,33 @@ class GameFrame extends JFrame {
     
     while(true){
       clock.update();
-      for(int i = 0; i <5; i++){
-        zoms[i].update(clock.getElapsedTime(), player);
-        if (player.checkCollision(zoms[i])){
-          player.changeSpeed(-1*player.getSpeed());
-          zoms[i].changeSpeed(-1.5*zoms[i].getSpeed());
-        }
-        
-      }
       
+      for(int i = 0; i <5; i++){
+        if (zoms[i] != null){
+          zoms[i].update(clock.getElapsedTime(), player);
+          if (player.checkCollision(zoms[i])){
+            player.changeSpeed(-1*player.getSpeed());
+            zoms[i].changeSpeed(-1.5*zoms[i].getSpeed());
+            player.loseHealth(20.0);
+            System.out.println(player.returnHealth());
+            
+          }
+          if (bullet != null && zoms[i].checkCollision(bullet)){
+            zoms[i].loseHealth(player.returnWeapon().returnDamage());
+            bulletShootable = true;
+            bullet = null;
+            
+            if(zoms[i].returnHealth() <= 0){
+              zoms[i] = null;
+            }
+          }
+        }
+      }
+      if (player.returnHealth()<=0){
+        player = null;
+        this.repaint();
+        break;
+      }
       if (pressW && (player.getSpeed() < 1.5))
       {
         player.accelerate(clock.getElapsedTime());
@@ -156,18 +180,47 @@ class GameFrame extends JFrame {
       {
         player.slowDownAngularSpeed(clock.getElapsedTime());
       }
+      
+      
       if(pressSpace){
-        if ((player.returnWeapon()).getAmmo() > 0  && (player.returnWeapon()).getCoolDown() <= 0){
-          System.out.println((player.returnWeapon()).getCoolDown());
-          System.out.println((player.returnWeapon()).getAmmo());
+        if ((player.returnWeapon()).getAmmo() > 0 && bulletShootable == true && bulletCoolDown <= 0){
+          
           player.attack();
           
+          bullet = new Bullet (player.returnX(),player.returnY(),10,10,100,10,player.getRotation(),player.getAngularSpeed());
+          
+          bulletShootable = false;
+          
+          if(player.returnWeapon() instanceof Shotgun){
+            bulletCoolDown = 500000;
+          }
+          else if (player.returnWeapon() instanceof Pistol){
+            bulletCoolDown = 350000;
+          }
+          else if (player.returnWeapon() instanceof AssaultRifle){
+            bulletCoolDown = 50000;
+          }
         }
-System.out.println((player.returnWeapon()).getCoolDown());
-          System.out.println((player.returnWeapon()).getAmmo());
         
       }
-      (player.returnWeapon()).changeCoolDown(1);
+      
+      if (bulletShootable == false && bullet != null){
+        bullet.update(clock.getElapsedTime());
+        
+        
+        if (bullet != null && (bullet.returnX() <= 0 || bullet.returnX() >= java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width)){
+          bulletShootable = true;
+          bullet = null;
+        }
+        if (bullet != null && (bullet.returnY() <= 0 || bullet.returnY() >= java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height)){
+          bulletShootable = true;
+          bullet = null;
+        }
+      }
+      
+      
+      bulletCoolDown-=clock.getElapsedTime()/100;
+      
       
       player.move(clock.getElapsedTime());
       
@@ -185,10 +238,16 @@ System.out.println((player.returnWeapon()).getCoolDown());
       setDoubleBuffered(true); 
       
       
-      
-      player.draw(g, tingImage); 
+      if (player != null){
+        player.draw(g, tingImage); 
+      }
       for(int i = 0; i <5; i++){
-        zoms[i].draw(g, zomImage);
+        if (zoms[i] != null){
+          zoms[i].draw(g, zomImage);
+        }
+      }
+      if (bullet != null){
+        bullet.draw(g, bulletImage);
       }
     }
   }
@@ -242,8 +301,6 @@ System.out.println((player.returnWeapon()).getCoolDown());
   private class MyMouseListener implements MouseListener {
     
     public void mouseClicked(MouseEvent e) {
-      System.out.println("Mouse Clicked");
-      System.out.println("X:"+e.getX() + " y:"+e.getY());
     }
     
     public void mousePressed(MouseEvent e) {

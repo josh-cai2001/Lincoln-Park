@@ -8,41 +8,19 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.util.*;
 
-public class Zombie extends Moving{
+public class Bullet extends Moving{
 
-  Zombie(double x, double y, double w, double h, double health, double speed, double rotation, double angularSpeed){
-    super(x, y, w, h, health, 0.75, speed, rotation, angularSpeed);
+  Bullet(double x, double y, double w, double h, double health, double speed, double rotation, double angularSpeed){
+    super(x, y, w, h, health, 10, speed, rotation, angularSpeed);
   }
   
-  public void faceCharacter(MapItem m){
-    if ((m.returnX() > returnX()) && (m.returnY() > returnY()) ){
-      double tempAngle = Math.toDegrees(Math.atan(Math.abs(m.returnX() -  returnX())/Math.abs(m.returnY() - returnY()))); 
-      changeRotation(180-tempAngle);
-    }
-    else if ((m.returnX() > returnX()) && (m.returnY() < returnY()) ){
-      double tempAngle = Math.toDegrees(Math.atan(Math.abs(m.returnY() -  returnY())/Math.abs(m.returnX() - returnX()))); 
-      changeRotation(90-tempAngle);
-    }
-    else if ((m.returnX() < returnX()) && (m.returnY() < returnY()) ){
-      double tempAngle = Math.toDegrees(Math.atan(Math.abs(m.returnY() -  returnY())/Math.abs(m.returnX() - returnX()))); 
-      changeRotation(270+tempAngle);
-    }
-    else if ((m.returnX() < returnX()) && (m.returnY() > returnY()) ){
-      double tempAngle = Math.toDegrees(Math.atan(Math.abs(m.returnY() -  returnY())/Math.abs(m.returnX() - returnX()))); 
-      changeRotation(270-tempAngle);
-    }
-  }
   
   public void move(double elapsedTime){
-    if(getSpeed() <= 0.25){
-      accelerate(elapsedTime);
-    }
     changeX(returnX() + getSpeed()*Math.sin(Math.toRadians(getRotation()))*elapsedTime*100);
     changeY(returnY() - getSpeed()*Math.cos(Math.toRadians(getRotation()))*elapsedTime*100);
   }
   
-  public void update(double elapsedTime, MapItem m){
-    faceCharacter(m);
+  public void update(double elapsedTime){
     move(elapsedTime);
   }
   
@@ -130,5 +108,4 @@ public class Zombie extends Moving{
       return false;
     }
   }
-  
 }

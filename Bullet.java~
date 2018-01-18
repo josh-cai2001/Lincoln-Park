@@ -8,10 +8,10 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.util.*;
 
-public class Zombie extends Moving{
+public class Bullet extends Moving{
 
-  Zombie(double x, double y, double w, double h, double health, double speed, double rotation, double angularSpeed){
-    super(x, y, w, h, health, 0.75, speed, rotation, angularSpeed);
+  Bullet(double x, double y, double w, double h, double health, double speed){
+    super(x, y, w, h, health, 0.75, speed);
   }
   
   public void faceCharacter(MapItem m){
@@ -130,5 +130,4 @@ public class Zombie extends Moving{
       return false;
     }
   }
-  
 }
