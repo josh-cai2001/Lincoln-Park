@@ -10,7 +10,7 @@ public class Character extends Moving{
   
   Character(double x, double y, double w, double h, double health, double fatigue, double hunger, double thirst, double fuel, double speed, double rotation, double angularSpeed){
     super(x, y, w, h, health, 1, speed, rotation, angularSpeed);
-    weapon = new Pistol(1, 1, 1, 1);
+    weapon = new Pistol(1, 1, 1, 1, 50);
     this.fatigue = fatigue;
     this.hunger = hunger;
     this.thirst = thirst;
@@ -23,9 +23,8 @@ public class Character extends Moving{
     this.weapon = p;
   }
   public void attack(){
-    if (weapon.getAmmo() > 0  && weapon.getCoolDown() <= 0){
+    if (weapon.getAmmo() > 0){
       weapon.shoot();
-      weapon.resetCoolDown();
     }
   } 
                       
@@ -83,14 +82,33 @@ public class Character extends Moving{
 //  }
   
   
-  public void rest(int recover){
+  public void rest(double recover){
     this.fatigue -= recover;
   }
-  public void eat(int food){
-    this.hunger += food;
+  public void eat(double food){
+    if (this.hunger + food >= 100){
+      this.hunger = 100;
+    }
+    else{
+      this.hunger += food;
+    }
   }
-  public void drink(int water){
-    this.thirst += water;
+  public void drink(double water){
+    if (this.thirst + water >= 100){
+      this.thirst = 100;
+    }
+    else{
+      this.thirst += water;
+    }
+  }
+  
+  public void addFuel(double fuel){
+    if (this.fuel + fuel >= 100){
+      this.fuel = 100;
+    }
+    else{
+      this.fuel += fuel;
+    }
   }
   
   public double returnFatigue(){

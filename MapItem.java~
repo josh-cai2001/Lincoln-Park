@@ -23,6 +23,9 @@ public class MapItem {
   public double returnW(){
     return this.w;
   }
+  public double returnDamage(){
+    return 2;
+  }
   public double returnH(){
     return this.h;
   }
@@ -41,10 +44,13 @@ public class MapItem {
     boundingBox.y = (int)change;
   }
   
+  public void loseHealth(double damage){
+    
+  }
   
   
-  
-  
+  public void addHealth(double health){
+  }
   public boolean checkCollision(MapItem m){
     if (boundingBox.intersects(m.boundingBox)){
       return true;
@@ -52,6 +58,8 @@ public class MapItem {
     else{
       return false;
     }
+  }
+  public void addFuel(double fuel){
   }
   public void faceCharacter(MapItem m){
     if ((m.returnX() > returnX()) && (m.returnY() > returnY()) ){

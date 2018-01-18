@@ -133,5 +133,13 @@ abstract class Moving extends MapItem{
   public void changeRotation(double change){
     this.rotation = change;
   }
+  public void addHealth(double health){
+    if (this.health + health >= 100){
+      this.health = 100;
+    }
+    else{
+      this.health += health;
+    }
+  }
   
 }

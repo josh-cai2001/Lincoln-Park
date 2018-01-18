@@ -115,7 +115,7 @@ abstract class Moving extends MapItem{
     this.energy = input;
   }
   
-  public void loseHealth(int damage){
+  public void loseHealth(double damage){
     this.health = this.health - damage;
   }
   public double returnHealth(){

@@ -1,3 +1,7 @@
+import java.awt.image.BufferedImage;
+import java.awt.Graphics;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 abstract public class Supplies extends MapItem{
   
   private double value;
@@ -14,5 +18,7 @@ abstract public class Supplies extends MapItem{
   public double returnValue(){
     return this.value;
   }
-  
+  public void draw(Graphics g, BufferedImage image){
+    g.drawImage(image, (int)returnX(), (int)returnY(), null);
+  }
 }

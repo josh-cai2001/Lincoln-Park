@@ -49,7 +49,8 @@ public class MapItem {
   }
   
   
-  
+  public void addHealth(double health){
+  }
   public boolean checkCollision(MapItem m){
     if (boundingBox.intersects(m.boundingBox)){
       return true;
@@ -57,6 +58,8 @@ public class MapItem {
     else{
       return false;
     }
+  }
+  public void addFuel(double fuel){
   }
   public void faceCharacter(MapItem m){
     if ((m.returnX() > returnX()) && (m.returnY() > returnY()) ){
@@ -154,6 +157,18 @@ public class MapItem {
   public double returnHealth(){
     return 1;
   }
+  public double returnFatigue(){
+    return 1;
+  }
+  public double returnFood(){
+    return 1;
+  }
+  public double returnWater(){
+    return 1;
+  }
+  public double returnFuel(){
+    return 1;
+  }
   public void changeSpeed(double change){
     
   }
@@ -216,4 +231,29 @@ public class MapItem {
   public void changeWeapon(Weapon p){
 
   }
+  public void changeValue(double change){
+  }
+  public double returnValue(){
+    return 1;
+  }
+  public void rest(double recover){
+    
+  }
+  public void eat(double food){
+
+  }
+  public void drink(double water){
+
+  }
+  public void loseHunger(){
+
+  }
+  public void loseThirst(){
+
+  }
+  public void addFatigue(){
+
+  }
+
+
 }
