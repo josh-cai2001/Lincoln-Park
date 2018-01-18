@@ -28,5 +28,8 @@ abstract public class Weapon extends MapItem{
   public void resetCoolDown(){
     this.coolDown = this.coolDownStore;
   }
+  public double returnDamage(){
+    return this.damage;
+  }
   
 }

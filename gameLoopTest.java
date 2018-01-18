@@ -23,7 +23,12 @@ import java.awt.event.MouseEvent;
 
 class GameFrame extends JFrame { 
   
-  public static BufferedImage tingImage;
+  public static BufferedImage humanPistolImage;
+  public static BufferedImage humanAssaultRifleImage;
+  public static BufferedImage humanShotgunImage;
+  public static BufferedImage shotgunImage;
+  public static BufferedImage pistolImage;
+  public static BufferedImage assaultRifleImage;
   public static BufferedImage zomImage;
   public static BufferedImage bulletImage;
   
@@ -31,24 +36,40 @@ class GameFrame extends JFrame {
   public static boolean pressA = false;
   public static boolean pressS = false;
   public static boolean pressD = false;
+  public static boolean pressE = false;
   public static boolean pressSpace = false;
   public static boolean bulletShootable = false;
   public static int bulletCoolDown = 0;
   
+  public static MapItem player = new Character(300,300,50,65,100,5,70,70,100, 0, 90, 0);
+  public static MapItem bullet = new Bullet (0,0,10,10,100,10,player.getRotation(),player.getAngularSpeed());
+  public static MapItem[] weapons = {new Pistol(600,600,20,10, 100), new Shotgun(600,700,50,20, 20), new AssaultRifle(700,600,50,20, 360)};
+  public static MapItem tempWeapon = new Pistol(1,1,1,1, 1);
+  public static MapItem[] zoms = {new Zombie(100,100,50,50,100,0.25, 0, 0), new Zombie(200,100,50,50,100,0.25, 0, 0), new Zombie(100,200,50,50,100,0.25, 0, 0), new Zombie(400,400,50,50,100,0.25,0,0), new Zombie(500,500,50,50,100,0.25,0,0)};
+  
   public static void main(String[] args) {
-    addZombies();
     try //Leading and resizing image
     {
-      tingImage = ImageIO.read(new File("./Sprites/main_human.PNG"));
+      humanPistolImage = ImageIO.read(new File("./Sprites/pistol_human.PNG"));
+      humanAssaultRifleImage = ImageIO.read(new File("./Sprites/assault_rifle_human.PNG"));
+      humanShotgunImage = ImageIO.read(new File("./Sprites/shotgun_human.PNG"));
+      pistolImage = ImageIO.read(new File("./Sprites/pistol.PNG"));
+      shotgunImage = ImageIO.read(new File("./Sprites/shotgun.PNG"));
+      assaultRifleImage = ImageIO.read(new File("./Sprites/assault_Rifle.PNG"));
       zomImage = ImageIO.read(new File("./Sprites/zombie.PNG"));
       bulletImage = ImageIO.read(new File("./Sprites/bullet.PNG"));
       
     } catch (IOException e) {}
-    tingImage = resizeImage(tingImage, (int)(player.returnW()), (int)(player.returnH()));
-    
+    humanPistolImage = resizeImage(humanPistolImage, (int)(player.returnW()), (int)(player.returnH()));
+    humanAssaultRifleImage = resizeImage(humanAssaultRifleImage, (int)(player.returnW()), (int)(player.returnH()));
+    humanShotgunImage = resizeImage(humanShotgunImage, (int)(player.returnW()), (int)(player.returnH()));
+    shotgunImage = resizeImage(shotgunImage, (int)(weapons[1].returnW()), (int)(weapons[1].returnH()));
+    pistolImage = resizeImage(pistolImage, (int)(weapons[0].returnW()), (int)(weapons[0].returnH()));
+    assaultRifleImage = resizeImage(assaultRifleImage, (int)(weapons[2].returnW()), (int)(weapons[2].returnH()));
     zomImage = resizeImage(zomImage, (int)(zoms[0].returnW()), (int)(zoms[0].returnH()));
     
     bulletImage = resizeImage(bulletImage, (int)(bullet.returnW()), (int)(bullet.returnH()));
+    
     
     GameFrame game= new GameFrame(); 
   }
@@ -64,29 +85,7 @@ class GameFrame extends JFrame {
     return dimg;
   }  
   
-  static MapItem player = new Character(300,300,50,50,100,5,70,70,100, 0, 90, 0);
-  static MapItem bullet = new Bullet (0,0,10,10,100,10,player.getRotation(),player.getAngularSpeed());
-  static MapItem[] zoms = new Zombie[5];
   
-  public static void addZombies(){
-    for (int i = 0; i < 5; i++){
-      if (i == 0){
-        zoms[i] = new Zombie(100,100,50,50,100,0.25, 0, 0);
-      }
-      else if (i == 1){
-        zoms[i] = new Zombie(200,100,50,50,100,0.25, 0, 0);
-      }
-      else if (i == 2){
-        zoms[i] = new Zombie(100,200,50,50,100,0.25, 0, 0);
-      }
-      else if (i == 3){
-        zoms[i] = new Zombie(400,400,50,50,100,0.25,0,0);
-      }
-      else if (i == 4){
-        zoms[i] = new Zombie(500,500,50,50,100,0.25,0,0);
-      }
-    }
-  }
   
   Clock clock = new Clock();
   
@@ -136,7 +135,6 @@ class GameFrame extends JFrame {
             player.changeSpeed(-1*player.getSpeed());
             zoms[i].changeSpeed(-1.5*zoms[i].getSpeed());
             player.loseHealth(20.0);
-            System.out.println(player.returnHealth());
             
           }
           if (bullet != null && zoms[i].checkCollision(bullet)){
@@ -149,6 +147,23 @@ class GameFrame extends JFrame {
             }
           }
         }
+      }
+      for(int i = 0; i <3; i++){
+        if(player.checkCollision(weapons[i]) && pressE == true){
+          if (player.returnWeapon() instanceof Pistol){
+            tempWeapon = new Pistol(player.returnX(), player.returnY(), 20, 10, player.returnWeapon().getAmmo());
+          }
+          else if (player.returnWeapon() instanceof AssaultRifle){
+            tempWeapon = new AssaultRifle(player.returnX(), player.returnY(), 50, 20, player.returnWeapon().getAmmo());
+          }
+          else if (player.returnWeapon() instanceof Shotgun){
+            tempWeapon = new Shotgun(player.returnX(), player.returnY(), 50, 20, player.returnWeapon().getAmmo());
+          }
+          player.changeWeapon((Weapon)weapons[i]);
+          weapons[i] = tempWeapon;
+          System.out.println(player.returnWeapon().getAmmo());
+        }
+
       }
       if (player.returnHealth()<=0){
         player = null;
@@ -183,6 +198,7 @@ class GameFrame extends JFrame {
       
       
       if(pressSpace){
+        
         if ((player.returnWeapon()).getAmmo() > 0 && bulletShootable == true && bulletCoolDown <= 0){
           
           player.attack();
@@ -192,7 +208,7 @@ class GameFrame extends JFrame {
           bulletShootable = false;
           
           if(player.returnWeapon() instanceof Shotgun){
-            bulletCoolDown = 500000;
+            bulletCoolDown = 750000;
           }
           else if (player.returnWeapon() instanceof Pistol){
             bulletCoolDown = 350000;
@@ -238,9 +254,7 @@ class GameFrame extends JFrame {
       setDoubleBuffered(true); 
       
       
-      if (player != null){
-        player.draw(g, tingImage); 
-      }
+      
       for(int i = 0; i <5; i++){
         if (zoms[i] != null){
           zoms[i].draw(g, zomImage);
@@ -248,6 +262,28 @@ class GameFrame extends JFrame {
       }
       if (bullet != null){
         bullet.draw(g, bulletImage);
+      }
+      for(int i = 0; i <3; i++){
+        if(weapons[i] instanceof Pistol){
+          weapons[i].draw(g, pistolImage);
+        }
+        else if(weapons[i] instanceof AssaultRifle){
+          weapons[i].draw(g, assaultRifleImage);
+        }
+        else if(weapons[i] instanceof Shotgun){
+          weapons[i].draw(g, shotgunImage);
+        }
+      }
+      if (player != null){
+        if(player.returnWeapon() instanceof Pistol){
+          player.draw(g, humanPistolImage); 
+        }
+        else if(player.returnWeapon() instanceof AssaultRifle){
+          player.draw(g, humanAssaultRifleImage);
+        }
+        else if(player.returnWeapon() instanceof Shotgun){
+          player.draw(g, humanShotgunImage);
+        }
       }
     }
   }
@@ -273,6 +309,9 @@ class GameFrame extends JFrame {
       if (KeyEvent.getKeyText(e.getKeyCode()).equals("D")) { 
         pressD = true;
       }
+      if (KeyEvent.getKeyText(e.getKeyCode()).equals("E")) { 
+        pressE = true;
+      }
       if (e.getKeyCode() == KeyEvent.VK_SPACE) {  //If ESC is pressed
         pressSpace = true;
       } 
@@ -290,6 +329,9 @@ class GameFrame extends JFrame {
       }
       if (KeyEvent.getKeyText(e.getKeyCode()).equals("D")) { 
         pressD = false;
+      }
+      if (KeyEvent.getKeyText(e.getKeyCode()).equals("E")) { 
+        pressE = false;
       }
       if (e.getKeyCode() == KeyEvent.VK_SPACE) {  //If ESC is pressed
         pressSpace = false;

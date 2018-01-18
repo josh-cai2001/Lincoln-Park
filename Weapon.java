@@ -1,3 +1,7 @@
+import java.awt.image.BufferedImage;
+import java.awt.Graphics;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 abstract public class Weapon extends MapItem{
   
   private double ammo, coolDown, damage, coolDownStore;
@@ -31,5 +35,7 @@ abstract public class Weapon extends MapItem{
   public double returnDamage(){
     return this.damage;
   }
-  
+  public void draw(Graphics g, BufferedImage image){
+    g.drawImage(image, (int)returnX(), (int)returnY(), null);
+  }
 }

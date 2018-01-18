@@ -10,7 +10,7 @@ public class Character extends Moving{
   
   Character(double x, double y, double w, double h, double health, double fatigue, double hunger, double thirst, double fuel, double speed, double rotation, double angularSpeed){
     super(x, y, w, h, health, 1, speed, rotation, angularSpeed);
-    weapon = new Pistol(1, 1, 1, 1);
+    weapon = new Shotgun(1, 1, 1, 1, 20);
     this.fatigue = fatigue;
     this.hunger = hunger;
     this.thirst = thirst;
