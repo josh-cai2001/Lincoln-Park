@@ -35,6 +35,10 @@ class GameFrame extends JFrame {
   public static BufferedImage waterImage;
   public static BufferedImage medkitImage;
   public static BufferedImage fuelImage;
+  public static BufferedImage building1Image;
+  public static BufferedImage building2Image;
+  public static BufferedImage building3Image;
+  public static BufferedImage building4Image;
   
   public static boolean pressW = false;
   public static boolean pressA = false;
@@ -52,6 +56,7 @@ class GameFrame extends JFrame {
   public static MapItem tempWeapon = new Pistol(1,1,1,1, 1);
   public static MapItem[] supplies = {new MedKit(1000, 600, 30, 30), new Water(1100, 600, 30, 30), new Fuel(1200, 600, 30, 30), new Food(1300, 600, 30, 30),};
   public static MapItem[] zoms = {new Zombie(100,100,50,50,100,0.25, 0, 0), new Zombie(200,100,50,50,100,0.25, 0, 0), new Zombie(100,200,50,50,100,0.25, 0, 0), new Zombie(400,400,50,50,100,0.25,0,0), new Zombie(500,500,50,50,100,0.25,0,0)};
+  public static MapItem[] structures ={new Building1(100, 500, 200, 400)};
   
   public static void main(String[] args) {
     try //Leading and resizing image
@@ -68,6 +73,10 @@ class GameFrame extends JFrame {
       waterImage = ImageIO.read(new File("./Sprites/water.PNG"));
       fuelImage = ImageIO.read(new File("./Sprites/fuel.PNG"));
       medkitImage = ImageIO.read(new File("./Sprites/medkit.PNG"));
+      building1Image = ImageIO.read(new File("./Sprites/building1.PNG"));
+      building2Image = ImageIO.read(new File("./Sprites/building2.PNG"));
+      building3Image = ImageIO.read(new File("./Sprites/building3.PNG"));
+      building4Image = ImageIO.read(new File("./Sprites/building4.PNG"));
       
     } catch (IOException e) {}
     humanPistolImage = resizeImage(humanPistolImage, (int)(player.returnW()), (int)(player.returnH()));
@@ -82,6 +91,10 @@ class GameFrame extends JFrame {
     fuelImage = resizeImage(fuelImage, 30, 30);
     medkitImage = resizeImage(medkitImage, 30, 30);
     bulletImage = resizeImage(bulletImage, (int)(bullet.returnW()), (int)(bullet.returnH()));
+    building1Image = resizeImage(building1Image, 200, 400);
+    building2Image = resizeImage(building2Image, 50, 50);
+    building3Image = resizeImage(building3Image, 50, 50);
+    building4Image = resizeImage(building4Image, 50, 50);
     
     
     GameFrame game= new GameFrame(); 
@@ -180,10 +193,6 @@ class GameFrame extends JFrame {
               player.addHealth(supplies[i].returnValue());
               supplies[i] = null;
             }
-            System.out.println(player.returnFood());
-            System.out.println(player.returnHealth());
-            System.out.println(player.returnWater());
-            System.out.println(player.returnFuel());
           }
         }
       }
@@ -375,7 +384,7 @@ class GameFrame extends JFrame {
         }
         
       }
-      
+      structures[0].draw(g, building1Image);
     }
   }
   
