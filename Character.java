@@ -23,9 +23,8 @@ public class Character extends Moving{
     this.weapon = p;
   }
   public void attack(){
-    if (weapon.getAmmo() > 0  && weapon.getCoolDown() <= 0){
+    if (weapon.getAmmo() > 0){
       weapon.shoot();
-      weapon.resetCoolDown();
     }
   } 
                       

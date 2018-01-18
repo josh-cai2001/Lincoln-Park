@@ -18,7 +18,7 @@ abstract public class Weapon extends MapItem{
     return this.ammo;
   }
   public void shoot(){
-    this.ammo -= 1;
+    this.ammo -= 1d;
   }
   public void addAmmo(double change){
     this.ammo += change;

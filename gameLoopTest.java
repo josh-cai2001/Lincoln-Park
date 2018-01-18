@@ -149,19 +149,34 @@ class GameFrame extends JFrame {
         }
       }
       for(int i = 0; i <3; i++){
-        if(player.checkCollision(weapons[i]) && pressE == true){
-          if (player.returnWeapon() instanceof Pistol){
-            tempWeapon = new Pistol(player.returnX(), player.returnY(), 20, 10, player.returnWeapon().getAmmo());
+        if (weapons[i] != null){
+          if(player.checkCollision(weapons[i]) && pressE == true){
+            if (weapons[i] instanceof Pistol && player.returnWeapon() instanceof Pistol){
+              player.returnWeapon().addAmmo(weapons[i].getAmmo());
+              weapons[i] = null;
+            }
+            else if (weapons[i] instanceof Shotgun && player.returnWeapon() instanceof Shotgun){
+              player.returnWeapon().addAmmo(weapons[i].getAmmo());
+              weapons[i] = null;
+            }
+            else if (weapons[i] instanceof AssaultRifle && player.returnWeapon() instanceof AssaultRifle){
+              player.returnWeapon().addAmmo(weapons[i].getAmmo());
+              weapons[i] = null;
+            }
+            else{
+              if (player.returnWeapon() instanceof Pistol){
+                tempWeapon = new Pistol(player.returnX(), player.returnY(), 20, 10, player.returnWeapon().getAmmo());
+              }
+              else if (player.returnWeapon() instanceof AssaultRifle){
+                tempWeapon = new AssaultRifle(player.returnX(), player.returnY(), 50, 20, player.returnWeapon().getAmmo());
+              }
+              else if (player.returnWeapon() instanceof Shotgun){
+                tempWeapon = new Shotgun(player.returnX(), player.returnY(), 50, 20, player.returnWeapon().getAmmo());
+              }
+              player.changeWeapon((Weapon)weapons[i]);
+              weapons[i] = tempWeapon;
+            }
           }
-          else if (player.returnWeapon() instanceof AssaultRifle){
-            tempWeapon = new AssaultRifle(player.returnX(), player.returnY(), 50, 20, player.returnWeapon().getAmmo());
-          }
-          else if (player.returnWeapon() instanceof Shotgun){
-            tempWeapon = new Shotgun(player.returnX(), player.returnY(), 50, 20, player.returnWeapon().getAmmo());
-          }
-          player.changeWeapon((Weapon)weapons[i]);
-          weapons[i] = tempWeapon;
-          System.out.println(player.returnWeapon().getAmmo());
         }
 
       }
