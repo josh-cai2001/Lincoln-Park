@@ -20,6 +20,8 @@ import java.awt.event.KeyListener;
 //Mouse imports
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import java.io.*;
+import java.util.*;
 
 class GameFrame extends JFrame { 
   
@@ -77,6 +79,10 @@ class GameFrame extends JFrame {
       building2Image = ImageIO.read(new File("./Sprites/building2.PNG"));
       building3Image = ImageIO.read(new File("./Sprites/building3.PNG"));
       building4Image = ImageIO.read(new File("./Sprites/building4.PNG"));
+      
+      Scanner sc = new Scanner(new File("./save1.txt"));
+      int dummy = sc.nextInt();
+      player = new Character(sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt());
       
     } catch (IOException e) {}
     humanPistolImage = resizeImage(humanPistolImage, (int)(player.returnW()), (int)(player.returnH()));
