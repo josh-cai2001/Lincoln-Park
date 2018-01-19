@@ -131,7 +131,7 @@ public class level1 extends JFrame {
     building4Image = resizeImage(building4Image, 150, 405);
     background = resizeImage(background,java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width, java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height);
     
-    level1 game= new level1(); 
+    new level1(); 
     
     while(win==false){
     }
@@ -153,6 +153,17 @@ public class level1 extends JFrame {
     pw.println((int)player.getAngularSpeed());
     pw.close();
     System.out.println("yay");
+  }
+  
+  public static boolean allZomsDead(){
+    boolean flag = true;
+    for (int i = 0; i < zoms.length; i++){
+      if (zoms[i] != null){
+        flag = false;
+      }
+      
+    }
+    return flag;
   }
   
   public static BufferedImage resizeImage(BufferedImage img, int newW, int newH) {  
@@ -319,7 +330,7 @@ public class level1 extends JFrame {
           break;
         }
         
-        if(player != null && player.checkCollision(checkpoint)){
+        if(player != null && player.checkCollision(checkpoint) && allZomsDead()){
           win = true;
           break;
         }
@@ -424,6 +435,7 @@ public class level1 extends JFrame {
     
     
     
+    
   }
   
   /** --------- INNER CLASSES ------------- **/
@@ -504,7 +516,9 @@ public class level1 extends JFrame {
       
       
       
-      
+      if (win == true){
+        g.drawString("Level Cleared", 1000, 500);
+      }
       
 //      for(int i = 0; i < structures.length; i++){
 //        if (structures[i] instanceof Building1){

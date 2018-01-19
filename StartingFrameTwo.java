@@ -125,7 +125,7 @@ class StartingFrameTwo extends JFrame {
   public void actionPerformed(ActionEvent event) {
    System.out.println("Starting new Game");
    thisFrame.dispose();
-   new GameFrameTwo(); // create a new FunkyFrame (another file that
+   new level1(); // create a new FunkyFrame (another file that
    // extends JFrame)
 
   }

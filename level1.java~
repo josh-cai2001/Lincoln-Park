@@ -23,7 +23,7 @@ import java.awt.event.MouseEvent;
 import java.io.*;
 import java.util.*;
 
-class GameFrame extends JFrame { 
+public class level1 extends JFrame { 
   
   public static BufferedImage humanPistolImage;
   public static BufferedImage humanAssaultRifleImage;
@@ -50,8 +50,21 @@ class GameFrame extends JFrame {
   public static boolean pressE = false;
   public static boolean pressSpace = false;
   public static boolean bulletShootable = false;
+  public static boolean win = false;
   public static int bulletCoolDown = 0;
   public static double statsCoolDown = 0;
+  public static int c1 = 0;
+  public static int c2 = 0;
+  public static int c3 = 0;
+  public static int c4 = 0;
+  public static int c5 = 0;
+  public static int c6 = 0;
+  public static int c7 = 0;
+  public static int c8 = 0;
+  public static int c9 = 0;
+  public static int c10 = 0;
+  public static int c11 = 0;
+  public static int c12 = 0;
   
   public static MapItem player = new Character(300,300,50,65,100,5,70,70,100, 0, 90, 0);
   public static MapItem bullet = new Bullet (0,0,10,10,100,10,player.getRotation(),player.getAngularSpeed());
@@ -60,8 +73,9 @@ class GameFrame extends JFrame {
   public static MapItem[] supplies = {new MedKit(1000, 600, 30, 30), new Water(1100, 600, 30, 60), new Food(1300, 600, 30, 40),};
   public static MapItem[] zoms = {new Zombie(100,100,50,50,100,0.25, 0, 0), new Zombie(200,100,50,50,100,0.25, 0, 0), new Zombie(100,200,50,50,100,0.25, 0, 0), new Zombie(400,400,50,50,100,0.25,0,0), new Zombie(500,500,50,50,100,0.25,0,0)};
   public static MapItem[] structures ={new Building1(150, 590, 150, 325), new Building2(300, 815, 120,105), new Building4(150, 100, 150, 405), new Building2(300, 315, 120,105), new Building3(300,100,510,105), new Building3(930,100,510,105), new Building2(1440,100,120,105), new Building2(1560,100,120,105),new Building3(580, 305, 510,105)};
+  public static MapItem checkpoint = new Building2(1440,100,120,105);
   
-  public static void main(String[] args) {
+  public static void main(String[] args)throws Exception{
     try //Leading and resizing image
     {
       humanPistolImage = ImageIO.read(new File("./Sprites/pistol_human.PNG"));
@@ -84,7 +98,19 @@ class GameFrame extends JFrame {
       
       Scanner sc = new Scanner(new File("./save1.txt"));
       int dummy = sc.nextInt();
-      player = new Character(sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt(),sc.nextInt());
+      c1 = sc.nextInt();
+      c2 = sc.nextInt();
+      c3 = sc.nextInt();
+      c4 = sc.nextInt();
+      c5 = sc.nextInt();
+      c6 = sc.nextInt();
+      c7 = sc.nextInt();
+      c8 = sc.nextInt();
+      c9 = sc.nextInt();
+      c10 = sc.nextInt();
+      c11 = sc.nextInt();
+      c12 = sc.nextInt();
+      player = new Character(c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12);
       
     } catch (IOException e) {}
     humanPistolImage = resizeImage(humanPistolImage, (int)(player.returnW()), (int)(player.returnH()));
@@ -105,7 +131,28 @@ class GameFrame extends JFrame {
     building4Image = resizeImage(building4Image, 150, 405);
     background = resizeImage(background,java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width, java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height);
     
-    GameFrame game= new GameFrame(); 
+    level1 game= new level1(); 
+    
+    while(win==false){
+    }
+    
+    PrintWriter pw = new PrintWriter(new File("save1.txt"));
+    pw.println(2);
+    System.out.println((int)player.returnFood());
+    pw.println(450);
+    pw.println(750);
+    pw.println(50);
+    pw.println(65);
+    pw.println((int)player.returnHealth());
+    pw.println((int)player.returnFatigue());
+    pw.println((int)player.returnFood());
+    pw.println((int)player.returnWater());
+    pw.println((int)player.returnFuel());
+    pw.println((int)player.getSpeed());
+    pw.println((int)player.getRotation());
+    pw.println((int)player.getAngularSpeed());
+    pw.close();
+    System.out.println("yay");
   }
   
   public static BufferedImage resizeImage(BufferedImage img, int newW, int newH) {  
@@ -123,18 +170,18 @@ class GameFrame extends JFrame {
   
   Clock clock = new Clock();
   
-  static GameAreaPanel gamePanel;
+  static GameAreaPanel gamePanel ;
   
   
   //Constructor - this runs first
-  GameFrame() {
+  level1(){
     
     super("My Game");  
     // Set the frame to full screen 
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setSize(1900,1000);
     // this.setUndecorated(true);  //Set to true to remove title bar
-    //frame.setResizable(false);
+    this.setResizable(false);
     
     //Set up the game panel (where we put our graphics)
     gamePanel = new GameAreaPanel();
@@ -147,11 +194,11 @@ class GameFrame extends JFrame {
     this.addMouseListener(mouseListener);
     
     this.requestFocusInWindow(); //make sure the frame has focus   
-
+    
     this.setVisible(true);
     
     //Start the game loop in a separate thread
-    Thread t = new Thread(new Runnable() { public void run() { animate(); }}); //start the gameLoop 
+    Thread t = new Thread (new Runnable() { public void run(){ animate(); }} ); //start the gameLoop 
     t.start();
     
   } //End of Constructor
@@ -159,29 +206,47 @@ class GameFrame extends JFrame {
   //the main gameloop - this is where the game state is updated
   public void animate() { 
     
-    while(true){
-      clock.update();
-      
-      for(int i = 0; i < zoms.length; i++){
-        if (zoms[i] != null){
-          zoms[i].update(clock.getElapsedTime(), player);
-          if (player.checkCollision(zoms[i])){
-            player.changeSpeed(-1*player.getSpeed());
-            zoms[i].changeSpeed(-1.5*zoms[i].getSpeed());
-            player.loseHealth(20.0);
-            
-          }
-          if (bullet != null && zoms[i].checkCollision(bullet)){
-            zoms[i].loseHealth(player.returnWeapon().returnDamage());
-            bulletShootable = true;
-            bullet = null;
-            
-            if(zoms[i].returnHealth() <= 0){
-              zoms[i] = null;
+    win = false;
+    
+    while(win == false){
+      player = new Character(c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12);
+      bullet = new Bullet (0,0,10,10,100,10,player.getRotation(),player.getAngularSpeed());
+      weapons[0] = new Pistol(500,600,20,10, 100);
+      weapons[1] = new Shotgun(500,700,70,20, 20);
+      weapons[2] = new AssaultRifle(750,600,50,20, 360);
+      tempWeapon = new Pistol(1,1,1,1, 1);
+      supplies[0] = new MedKit(1000, 600, 30, 30);
+      supplies[1] = new Water(1100, 600, 30, 60);
+      supplies[2] = new Food(1300, 600, 30, 40);
+      zoms[0] = new Zombie(100,100,50,50,100,0.25, 0, 0);
+      zoms[1] = new Zombie(200,100,50,50,100,0.25, 0, 0);
+      zoms[2] = new Zombie(100,200,50,50,100,0.25, 0, 0);
+      zoms[3] = new Zombie(400,400,50,50,100,0.25,0,0);
+      zoms[4] = new Zombie(500,500,50,50,100,0.25,0,0);
+      checkpoint = new Building2(1440,100,120,105);
+      while(true){
+        clock.update();
+        
+        for(int i = 0; i < zoms.length; i++){
+          if (zoms[i] != null && player != null){
+            zoms[i].update(clock.getElapsedTime(), player);
+            if (player.checkCollision(zoms[i])){
+              player.changeSpeed(-1*player.getSpeed());
+              zoms[i].changeSpeed(-1.5*zoms[i].getSpeed());
+              player.loseHealth(20.0);
+              
+            }
+            if (bullet != null && zoms[i].checkCollision(bullet)){
+              zoms[i].loseHealth(player.returnWeapon().returnDamage());
+              bulletShootable = true;
+              bullet = null;
+              
+              if(zoms[i].returnHealth() <= 0){
+                zoms[i] = null;
+              }
             }
           }
         }
-      }
 //      for(int i = 0; i <structures.length; i++){
 //        if (player.checkCollision(structures[i])){
 //          if (player.getSpeed() > 0){
@@ -192,161 +257,172 @@ class GameFrame extends JFrame {
 //          }
 //        }
 //      }
-      for(int i = 0; i <supplies.length; i++){
-        if(supplies[i] != null){
-          if (player.checkCollision(supplies[i])){
-            if (supplies[i] instanceof Water){
-              player.drink(supplies[i].returnValue());
-              supplies[i] = null;
-            }
-            else if (supplies[i] instanceof Food){
-              player.eat(supplies[i].returnValue());
-              supplies[i] = null;
-            }
-            else if (supplies[i] instanceof Fuel){
-              player.addFuel(supplies[i].returnValue());
-              supplies[i] = null;
-            }
-            else if (supplies[i] instanceof MedKit){
-              player.addHealth(supplies[i].returnValue());
-              supplies[i] = null;
+        for(int i = 0; i <supplies.length; i++){
+          if(supplies[i] != null && player != null){
+            if (player.checkCollision(supplies[i])){
+              if (supplies[i] instanceof Water){
+                player.drink(supplies[i].returnValue());
+                supplies[i] = null;
+              }
+              else if (supplies[i] instanceof Food){
+                player.eat(supplies[i].returnValue());
+                supplies[i] = null;
+              }
+              else if (supplies[i] instanceof Fuel){
+                player.addFuel(supplies[i].returnValue());
+                supplies[i] = null;
+              }
+              else if (supplies[i] instanceof MedKit){
+                player.addHealth(supplies[i].returnValue());
+                supplies[i] = null;
+              }
             }
           }
         }
-      }
-      for(int i = 0; i <weapons.length; i++){
-        if (weapons[i] != null){
-          if(player.checkCollision(weapons[i]) && pressE == true){
-            if (weapons[i] instanceof Pistol && player.returnWeapon() instanceof Pistol){
-              player.returnWeapon().addAmmo(weapons[i].getAmmo());
-              weapons[i] = null;
-            }
-            else if (weapons[i] instanceof Shotgun && player.returnWeapon() instanceof Shotgun){
-              player.returnWeapon().addAmmo(weapons[i].getAmmo());
-              weapons[i] = null;
-            }
-            else if (weapons[i] instanceof AssaultRifle && player.returnWeapon() instanceof AssaultRifle){
-              player.returnWeapon().addAmmo(weapons[i].getAmmo());
-              weapons[i] = null;
-            }
-            else{
-              if (player.returnWeapon() instanceof Pistol){
-                tempWeapon = new Pistol(player.returnX(), player.returnY(), 20, 10, player.returnWeapon().getAmmo());
+        for(int i = 0; i <weapons.length; i++){
+          if (weapons[i] != null && player != null){
+            if(player.checkCollision(weapons[i]) && pressE == true){
+              if (weapons[i] instanceof Pistol && player.returnWeapon() instanceof Pistol){
+                player.returnWeapon().addAmmo(weapons[i].getAmmo());
+                weapons[i] = null;
               }
-              else if (player.returnWeapon() instanceof AssaultRifle){
-                tempWeapon = new AssaultRifle(player.returnX(), player.returnY(), 50, 20, player.returnWeapon().getAmmo());
+              else if (weapons[i] instanceof Shotgun && player.returnWeapon() instanceof Shotgun){
+                player.returnWeapon().addAmmo(weapons[i].getAmmo());
+                weapons[i] = null;
               }
-              else if (player.returnWeapon() instanceof Shotgun){
-                tempWeapon = new Shotgun(player.returnX(), player.returnY(), 50, 20, player.returnWeapon().getAmmo());
+              else if (weapons[i] instanceof AssaultRifle && player.returnWeapon() instanceof AssaultRifle){
+                player.returnWeapon().addAmmo(weapons[i].getAmmo());
+                weapons[i] = null;
               }
-              player.changeWeapon((Weapon)weapons[i]);
-              weapons[i] = tempWeapon;
+              else{
+                if (player.returnWeapon() instanceof Pistol){
+                  tempWeapon = new Pistol(player.returnX(), player.returnY(), 20, 10, player.returnWeapon().getAmmo());
+                }
+                else if (player.returnWeapon() instanceof AssaultRifle){
+                  tempWeapon = new AssaultRifle(player.returnX(), player.returnY(), 50, 20, player.returnWeapon().getAmmo());
+                }
+                else if (player.returnWeapon() instanceof Shotgun){
+                  tempWeapon = new Shotgun(player.returnX(), player.returnY(), 50, 20, player.returnWeapon().getAmmo());
+                }
+                player.changeWeapon((Weapon)weapons[i]);
+                weapons[i] = tempWeapon;
+              }
             }
+          }
+          
+        }
+        
+        if (player != null && player.returnHealth()<=0){
+          player = null;
+          this.repaint();
+          win = false;
+          break;
+        }
+        
+        if(player != null && player.checkCollision(checkpoint)){
+          win = true;
+          break;
+        }
+        
+        if(player != null && (player.returnX() <= 0 || player.returnX() >= 1900)){
+          player.changeSpeed(-1*player.getSpeed());
+        }
+        if(player != null && (player.returnY() <= 100 || player.returnY() >= 950)){
+          player.changeSpeed(-1*player.getSpeed());
+        }
+        
+        if (player != null && pressW && (player.getSpeed() < 1.5) && player.returnFatigue() < 100)
+        {
+          player.accelerate(clock.getElapsedTime());
+        }
+        else if (player != null && pressS && (player.getSpeed() > -1.5) && player.returnFatigue() < 100)
+        {
+          player.decelerate(clock.getElapsedTime());
+        }
+        else if (player != null && player.getSpeed() != 0)
+        {
+          player.slowDown(clock.getElapsedTime());
+        }
+        
+        if (player != null && pressD && (player.getAngularSpeed() < 1.5))
+        {
+          player.accelerateRight(clock.getElapsedTime());
+        }
+        else if (player != null && pressA && (player.getAngularSpeed() > -1.5))
+        {
+          player.accelerateLeft(clock.getElapsedTime());
+        }
+        else if (player != null && player.getAngularSpeed() != 0)
+        {
+          player.slowDownAngularSpeed(clock.getElapsedTime());
+        }
+        
+        
+        if(player != null && pressSpace){
+          
+          if ((player.returnWeapon()).getAmmo() > 0 && bulletShootable == true && bulletCoolDown <= 0){
+            
+            player.attack();
+            
+            bullet = new Bullet (player.returnX(),player.returnY(),10,10,100,10,player.getRotation(),player.getAngularSpeed());
+            
+            bulletShootable = false;
+            
+            if(player.returnWeapon() instanceof Shotgun){
+              bulletCoolDown = 1000000;
+            }
+            else if (player.returnWeapon() instanceof Pistol){
+              bulletCoolDown = 750000;
+            }
+            else if (player.returnWeapon() instanceof AssaultRifle){
+              bulletCoolDown = 500000;
+            }
+          }
+          
+        }
+        
+        if (bulletShootable == false && bullet != null){
+          bullet.update(clock.getElapsedTime());
+          
+          
+          if (bullet != null && (bullet.returnX() <= 0 || bullet.returnX() >= 1900)){
+            bulletShootable = true;
+            bullet = null;
+          }
+          if (bullet != null && (bullet.returnY() <= 100 || bullet.returnY() >= 1000)){
+            bulletShootable = true;
+            bullet = null;
           }
         }
         
-      }
-      
-      if (player.returnHealth()<=0){
-        player = null;
+        
+        bulletCoolDown-=clock.getElapsedTime()/100;
+        
+        if(player != null && statsCoolDown >= 5){
+          statsCoolDown = 0;
+          player.loseHunger();
+          player.loseThirst();
+          player.addFatigue();  
+          if(player.returnWater() <= 0){
+            player.loseHealth(5d);
+          }
+          if(player.returnFood() <= 0){
+            player.loseHealth(5d);
+          }
+        }
+        
+        
+        statsCoolDown += clock.getElapsedTime();
+        if (player != null){
+          player.move(clock.getElapsedTime());
+        }
+        
         this.repaint();
-        break;
-      }
-      
-      if(player.returnX() <= 0 || player.returnX() >= 1900){
-        player.changeSpeed(-1*player.getSpeed());
-      }
-      if(player.returnY() <= 100 || player.returnY() >= 950){
-        player.changeSpeed(-1*player.getSpeed());
-      }
-      
-      if (pressW && (player.getSpeed() < 1.5) && player.returnFatigue() < 100)
-      {
-        player.accelerate(clock.getElapsedTime());
-      }
-      else if (pressS && (player.getSpeed() > -1.5) && player.returnFatigue() < 100)
-      {
-        player.decelerate(clock.getElapsedTime());
-      }
-      else if (player.getSpeed() != 0)
-      {
-        player.slowDown(clock.getElapsedTime());
-      }
-      
-      if (pressD && (player.getAngularSpeed() < 1.5))
-      {
-        player.accelerateRight(clock.getElapsedTime());
-      }
-      else if (pressA && (player.getAngularSpeed() > -1.5))
-      {
-        player.accelerateLeft(clock.getElapsedTime());
-      }
-      else if (player.getAngularSpeed() != 0)
-      {
-        player.slowDownAngularSpeed(clock.getElapsedTime());
-      }
-      
-      
-      if(pressSpace){
-        
-        if ((player.returnWeapon()).getAmmo() > 0 && bulletShootable == true && bulletCoolDown <= 0){
-          
-          player.attack();
-          
-          bullet = new Bullet (player.returnX(),player.returnY(),10,10,100,10,player.getRotation(),player.getAngularSpeed());
-          
-          bulletShootable = false;
-          
-          if(player.returnWeapon() instanceof Shotgun){
-            bulletCoolDown = 1000000;
-          }
-          else if (player.returnWeapon() instanceof Pistol){
-            bulletCoolDown = 750000;
-          }
-          else if (player.returnWeapon() instanceof AssaultRifle){
-            bulletCoolDown = 500000;
-          }
-        }
-        
-      }
-      
-      if (bulletShootable == false && bullet != null){
-        bullet.update(clock.getElapsedTime());
-        
-        
-        if (bullet != null && (bullet.returnX() <= 0 || bullet.returnX() >= 1900)){
-          bulletShootable = true;
-          bullet = null;
-        }
-        if (bullet != null && (bullet.returnY() <= 100 || bullet.returnY() >= 1000)){
-          bulletShootable = true;
-          bullet = null;
-        }
-      }
-      
-      
-      bulletCoolDown-=clock.getElapsedTime()/100;
-      
-      if(statsCoolDown >= 5){
-        statsCoolDown = 0;
-        player.loseHunger();
-        player.loseThirst();
-        player.addFatigue();  
-        if(player.returnWater() <= 0){
-          player.loseHealth(5d);
-        }
-        if(player.returnFood() <= 0){
-          player.loseHealth(5d);
-        }
-      }
-      
-      
-      statsCoolDown += clock.getElapsedTime();
-      
-      player.move(clock.getElapsedTime());
-      
-      this.repaint();
-    }    
+      }    
+    }
+    
+    
+    
     
   }
   
@@ -393,6 +469,7 @@ class GameFrame extends JFrame {
           zoms[i].draw(g, zomImage);
         }
       }
+      checkpoint.draw(g, building2Image);
       g.fillRect(0,0,java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width, 100);
       if (player != null){
         if(player.returnWeapon() instanceof Pistol){
