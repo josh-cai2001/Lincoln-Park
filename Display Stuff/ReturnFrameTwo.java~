@@ -16,17 +16,16 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-class ObjectiveFrameTwo extends JFrame {
+class ReturnFrameTwo extends JFrame {
 
  // class variable (non-static)
  static double x, y;
- static ObjectiveAreaPanel objectivePanel;
+ static ReturnAreaPanel objectivePanel;
  private final BufferedImage objectiveFrame;
 
  // Constructor - this runs first
- ObjectiveFrameTwo() throws IOException {
-  super("Objective");
-  objectiveFrame = ImageIO.read(new File("Objective.png"));
+ ReturnFrameTwo() throws IOException {
+  super("Return");
   // Set the frame to full screen
   this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   // his.setLocationRelativeTo(null); // start the frame in the center of
@@ -36,10 +35,10 @@ class ObjectiveFrameTwo extends JFrame {
   this.setBackground(new Color(0, 800, 0, 150));
 
   // Set up the game panel (where we put our graphics)
-  objectivePanel = new ObjectiveAreaPanel();
+  objectivePanel = new ReturnAreaPanel();
   objectivePanel.setBackground(new Color(0, 65, 200, 150));
 
-  this.add(new ObjectiveAreaPanel());
+  this.add(new ReturnAreaPanel());
 
   this.requestFocusInWindow(); // make sure the frame has focus
 
@@ -54,7 +53,7 @@ class ObjectiveFrameTwo extends JFrame {
 
  // Inner class for the the game area - This is where all the drawing of the
  // screen occurs
- private class ObjectiveAreaPanel extends JPanel {
+ private class ReturnAreaPanel extends JPanel {
   public void paintComponent(Graphics g) {
    super.paintComponent(g); // removed to keep transparent panel
    g.drawImage(objectiveFrame, 0, 0, this);

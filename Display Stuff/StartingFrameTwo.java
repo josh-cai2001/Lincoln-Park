@@ -25,10 +25,10 @@ class StartingFrameTwo extends JFrame {
  // Constructor - this runs first
  StartingFrameTwo() {
   super("Start Screen");
-  this.thisFrame = this; // lol
+  this.thisFrame = this; 
 
   // configure the window
-  this.setSize(1000, 698);
+  this.setSize(1800,900);
   this.setLocationRelativeTo(null); // start the frame in the center of
   // the screen
   this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,10 +53,14 @@ class StartingFrameTwo extends JFrame {
   JPanel mainPanel = new JPanel();
   mainPanel.setBackground(new Color(0, 0, 0, 0));
 
+  
+  
   // Create a JButton for the centerPanel
   ImageIcon startB = new ImageIcon("startbutton.png");
   ImageIcon instructionB = new ImageIcon("InstructionButton.png");
   ImageIcon objectiveB = new ImageIcon("objectiveButton.png");
+  ImageIcon returnB = new ImageIcon("ObjectiveButton.png");
+  
   SpringLayout sl_decPanel = new SpringLayout();
   sl_decPanel.putConstraint(SpringLayout.NORTH, background, 0, SpringLayout.NORTH, decPanel);
   sl_decPanel.putConstraint(SpringLayout.WEST, background, 0, SpringLayout.WEST, decPanel);
@@ -70,6 +74,7 @@ class StartingFrameTwo extends JFrame {
 
   decPanel.setLayout(sl_decPanel);
 
+  
   decPanel.add(mainPanel);
   mainPanel.setLayout(new BorderLayout(0, 0));
 
@@ -80,6 +85,15 @@ class StartingFrameTwo extends JFrame {
   bottomPanel.setLayout(springLayout);
   mainPanel.add(bottomPanel, BorderLayout.CENTER);
 
+  JButton returnButton = new JButton(returnB);
+    returnButton.setBackground(new Color(0, 0, 0, 0));
+    returnButton.setRolloverIcon(new ImageIcon("ReturnButtonPressed.png"));
+    returnButton.setBorder(BorderFactory.createEmptyBorder());
+    returnButton.setFocusPainted(false);
+    returnButton.addActionListener(new ReturnButtonListener());
+    
+  
+  
   // button number 1
   JButton startButton = new JButton(startB);
   startButton.setBackground(new Color(0, 0, 0, 0));
@@ -117,7 +131,9 @@ class StartingFrameTwo extends JFrame {
   bottomPanel.add(objectiveButton);
   // Start the app
   this.setVisible(true);
- }
+ } 
+ 
+   
 
  class StartButtonListener implements ActionListener { // this is the
   // required class
@@ -161,7 +177,21 @@ class StartingFrameTwo extends JFrame {
 
   }
  }
+ 
+ class ReturnButtonListener implements ActionListener{ 
+ public void actionPerformed(ActionEvent event) {
+   System.out.println("Return");
+   thisFrame.dispose();
+   try {
+    new ReturnFrameTwo();
+   } catch (IOException e) {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+   }
 
+  }
+ }
+   
  // Main method starts this application
  public static void main(String[] args) {
   new StartingFrameTwo();
