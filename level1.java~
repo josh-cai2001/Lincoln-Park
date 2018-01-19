@@ -41,6 +41,7 @@ class GameFrame extends JFrame {
   public static BufferedImage building2Image;
   public static BufferedImage building3Image;
   public static BufferedImage building4Image;
+  public static BufferedImage background;
   
   public static boolean pressW = false;
   public static boolean pressA = false;
@@ -54,11 +55,11 @@ class GameFrame extends JFrame {
   
   public static MapItem player = new Character(300,300,50,65,100,5,70,70,100, 0, 90, 0);
   public static MapItem bullet = new Bullet (0,0,10,10,100,10,player.getRotation(),player.getAngularSpeed());
-  public static MapItem[] weapons = {new Pistol(600,600,20,10, 100), new Shotgun(600,700,70,20, 20), new AssaultRifle(700,600,50,20, 360)};
+  public static MapItem[] weapons = {new Pistol(500,600,20,10, 100), new Shotgun(500,700,70,20, 20), new AssaultRifle(750,600,50,20, 360)};
   public static MapItem tempWeapon = new Pistol(1,1,1,1, 1);
-  public static MapItem[] supplies = {new MedKit(1000, 600, 30, 30), new Water(1100, 600, 30, 30), new Fuel(1200, 600, 30, 30), new Food(1300, 600, 30, 30),};
+  public static MapItem[] supplies = {new MedKit(1000, 600, 30, 30), new Water(1100, 600, 30, 60), new Food(1300, 600, 30, 40),};
   public static MapItem[] zoms = {new Zombie(100,100,50,50,100,0.25, 0, 0), new Zombie(200,100,50,50,100,0.25, 0, 0), new Zombie(100,200,50,50,100,0.25, 0, 0), new Zombie(400,400,50,50,100,0.25,0,0), new Zombie(500,500,50,50,100,0.25,0,0)};
-  public static MapItem[] structures ={new Building1(100, 500, 200, 400)};
+  public static MapItem[] structures ={new Building1(150, 590, 150, 325), new Building2(300, 815, 120,105), new Building4(150, 100, 150, 405), new Building2(300, 315, 120,105), new Building3(300,100,510,105), new Building3(930,100,510,105), new Building2(1440,100,120,105), new Building2(1560,100,120,105),new Building3(580, 305, 510,105)};
   
   public static void main(String[] args) {
     try //Leading and resizing image
@@ -75,6 +76,7 @@ class GameFrame extends JFrame {
       waterImage = ImageIO.read(new File("./Sprites/water.PNG"));
       fuelImage = ImageIO.read(new File("./Sprites/fuel.PNG"));
       medkitImage = ImageIO.read(new File("./Sprites/medkit.PNG"));
+      background = ImageIO.read(new File("./Sprites/TemplateOne.PNG"));
       building1Image = ImageIO.read(new File("./Sprites/building1.PNG"));
       building2Image = ImageIO.read(new File("./Sprites/building2.PNG"));
       building3Image = ImageIO.read(new File("./Sprites/building3.PNG"));
@@ -92,16 +94,16 @@ class GameFrame extends JFrame {
     pistolImage = resizeImage(pistolImage, (int)(weapons[0].returnW()), (int)(weapons[0].returnH()));
     assaultRifleImage = resizeImage(assaultRifleImage, (int)(weapons[2].returnW()), (int)(weapons[2].returnH()));
     zomImage = resizeImage(zomImage, (int)(zoms[0].returnW()), (int)(zoms[0].returnH()));
-    foodImage = resizeImage(foodImage, 30, 30);
-    waterImage = resizeImage(waterImage, 30, 30);
+    foodImage = resizeImage(foodImage, 30, 40);
+    waterImage = resizeImage(waterImage, 30, 60);
     fuelImage = resizeImage(fuelImage, 30, 30);
     medkitImage = resizeImage(medkitImage, 30, 30);
     bulletImage = resizeImage(bulletImage, (int)(bullet.returnW()), (int)(bullet.returnH()));
-    building1Image = resizeImage(building1Image, 200, 400);
-    building2Image = resizeImage(building2Image, 50, 50);
-    building3Image = resizeImage(building3Image, 50, 50);
-    building4Image = resizeImage(building4Image, 50, 50);
-    
+    building1Image = resizeImage(building1Image, 150, 325);
+    building2Image = resizeImage(building2Image, 120, 105);
+    building3Image = resizeImage(building3Image, 510, 105);
+    building4Image = resizeImage(building4Image, 150, 405);
+    background = resizeImage(background,java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width, java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height);
     
     GameFrame game= new GameFrame(); 
   }
@@ -130,7 +132,7 @@ class GameFrame extends JFrame {
     super("My Game");  
     // Set the frame to full screen 
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+    this.setSize(1900,1000);
     // this.setUndecorated(true);  //Set to true to remove title bar
     //frame.setResizable(false);
     
@@ -145,7 +147,7 @@ class GameFrame extends JFrame {
     this.addMouseListener(mouseListener);
     
     this.requestFocusInWindow(); //make sure the frame has focus   
-    
+
     this.setVisible(true);
     
     //Start the game loop in a separate thread
@@ -160,7 +162,7 @@ class GameFrame extends JFrame {
     while(true){
       clock.update();
       
-      for(int i = 0; i <5; i++){
+      for(int i = 0; i < zoms.length; i++){
         if (zoms[i] != null){
           zoms[i].update(clock.getElapsedTime(), player);
           if (player.checkCollision(zoms[i])){
@@ -180,7 +182,17 @@ class GameFrame extends JFrame {
           }
         }
       }
-      for(int i = 0; i <4; i++){
+//      for(int i = 0; i <structures.length; i++){
+//        if (player.checkCollision(structures[i])){
+//          if (player.getSpeed() > 0){
+//            player.changeSpeed(-0.25);
+//          }
+//          else if (player.getSpeed() < 0){
+//            player.changeSpeed(0.25);
+//          }
+//        }
+//      }
+      for(int i = 0; i <supplies.length; i++){
         if(supplies[i] != null){
           if (player.checkCollision(supplies[i])){
             if (supplies[i] instanceof Water){
@@ -202,7 +214,7 @@ class GameFrame extends JFrame {
           }
         }
       }
-      for(int i = 0; i <3; i++){
+      for(int i = 0; i <weapons.length; i++){
         if (weapons[i] != null){
           if(player.checkCollision(weapons[i]) && pressE == true){
             if (weapons[i] instanceof Pistol && player.returnWeapon() instanceof Pistol){
@@ -232,7 +244,7 @@ class GameFrame extends JFrame {
             }
           }
         }
-
+        
       }
       
       if (player.returnHealth()<=0){
@@ -241,10 +253,10 @@ class GameFrame extends JFrame {
         break;
       }
       
-      if(player.returnX() <= 0 || player.returnX() >= java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width){
+      if(player.returnX() <= 0 || player.returnX() >= 1900){
         player.changeSpeed(-1*player.getSpeed());
       }
-      if(player.returnY() <= 0 || player.returnY() >= java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height){
+      if(player.returnY() <= 100 || player.returnY() >= 950){
         player.changeSpeed(-1*player.getSpeed());
       }
       
@@ -286,13 +298,13 @@ class GameFrame extends JFrame {
           bulletShootable = false;
           
           if(player.returnWeapon() instanceof Shotgun){
-            bulletCoolDown = 75000;
+            bulletCoolDown = 1000000;
           }
           else if (player.returnWeapon() instanceof Pistol){
-            bulletCoolDown = 50000;
+            bulletCoolDown = 750000;
           }
           else if (player.returnWeapon() instanceof AssaultRifle){
-            bulletCoolDown = 25000;
+            bulletCoolDown = 500000;
           }
         }
         
@@ -302,11 +314,11 @@ class GameFrame extends JFrame {
         bullet.update(clock.getElapsedTime());
         
         
-        if (bullet != null && (bullet.returnX() <= 0 || bullet.returnX() >= java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width)){
+        if (bullet != null && (bullet.returnX() <= 0 || bullet.returnX() >= 1900)){
           bulletShootable = true;
           bullet = null;
         }
-        if (bullet != null && (bullet.returnY() <= 0 || bullet.returnY() >= java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height)){
+        if (bullet != null && (bullet.returnY() <= 100 || bullet.returnY() >= 1000)){
           bulletShootable = true;
           bullet = null;
         }
@@ -319,14 +331,15 @@ class GameFrame extends JFrame {
         statsCoolDown = 0;
         player.loseHunger();
         player.loseThirst();
-        player.addFatigue();
+        player.addFatigue();  
         if(player.returnWater() <= 0){
-          player.loseHealth(5);
+          player.loseHealth(5d);
         }
         if(player.returnFood() <= 0){
-          player.loseHealth(5);
+          player.loseHealth(5d);
         }
       }
+      
       
       statsCoolDown += clock.getElapsedTime();
       
@@ -345,10 +358,12 @@ class GameFrame extends JFrame {
       super.paintComponent(g); //required
       setDoubleBuffered(true); 
       
+      g.drawImage(background, 0, 0, null);
+      
       if (bullet != null){
         bullet.draw(g, bulletImage);
       }
-      for(int i = 0; i <3; i++){
+      for(int i = 0; i <weapons.length; i++){
         if(weapons[i] instanceof Pistol){
           weapons[i].draw(g, pistolImage);
         }
@@ -359,7 +374,7 @@ class GameFrame extends JFrame {
           weapons[i].draw(g, shotgunImage);
         }
       }
-      for(int i = 0; i <4; i++){
+      for(int i = 0; i <supplies.length; i++){
         if(supplies[i] instanceof Food){
           supplies[i].draw(g, foodImage);
         }
@@ -373,11 +388,12 @@ class GameFrame extends JFrame {
           supplies[i].draw(g, medkitImage);
         }
       }
-      for(int i = 0; i <5; i++){
+      for(int i = 0; i <zoms.length; i++){
         if (zoms[i] != null){
           zoms[i].draw(g, zomImage);
         }
       }
+      g.fillRect(0,0,java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width, 100);
       if (player != null){
         if(player.returnWeapon() instanceof Pistol){
           player.draw(g, humanPistolImage); 
@@ -388,9 +404,45 @@ class GameFrame extends JFrame {
         else if(player.returnWeapon() instanceof Shotgun){
           player.draw(g, humanShotgunImage);
         }
+        g.setColor(Color.white);
         
+        g.drawString("Level: 1", 50, 33);
+        g.drawString("Food: " +(int)player.returnFood(), 150, 33);
+        g.drawString("Fatigue: " +(int)player.returnFatigue(), 250, 33);
+        if(player.returnWeapon() instanceof Pistol){
+          g.drawString("Weapon: Pistol", 350, 33);
+        }
+        else if(player.returnWeapon() instanceof AssaultRifle){
+          g.drawString("Weapon: Assault Rifle", 350, 33);
+        }
+        else if(player.returnWeapon() instanceof Shotgun){
+          g.drawString("Weapon: Shotgun", 350, 33);
+        }
+        g.drawString("Fatigue: " +(int)player.returnFatigue(), 250, 33);
+        g.drawString("Health: "+(int)player.returnHealth(), 50, 66);
+        g.drawString("Water: " +(int)player.returnWater(), 150, 66);
+        g.drawString("Fuel: " +(int)player.returnFuel(), 250, 66);
+        g.drawString("Ammo: "+(int)player.returnWeapon().getAmmo(), 350, 66);
       }
-      structures[0].draw(g, building1Image);
+      
+      
+      
+      
+      
+//      for(int i = 0; i < structures.length; i++){
+//        if (structures[i] instanceof Building1){
+//          structures[i].draw(g, building1Image);
+//        }
+//        else if (structures[i] instanceof Building2){
+//          structures[i].draw(g, building2Image);
+//        }
+//        else if (structures[i] instanceof Building3){
+//          structures[i].draw(g, building3Image);
+//        }
+//        else if (structures[i] instanceof Building4){
+//          structures[i].draw(g, building4Image);
+//        }
+//      }
     }
   }
   
